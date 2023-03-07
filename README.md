@@ -23,3 +23,8 @@ data dictionary:
 |Requested_Date| Request Date and Time|
 |Updated_Date| Updated Date and Time|
 |Last_Table_Update| Last Table Update Date and Time|
+
+
+Libraries:
+Make sure you run
+npm install d3-scale-chromatic
