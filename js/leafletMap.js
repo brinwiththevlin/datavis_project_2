@@ -22,6 +22,7 @@ class LeafletMap {
         this.data.push(d);
       }
     });
+    //this.parseDateForDisplay = d3.time.format("%x_%X").parse;
     this.colorVar = _colorVar;
     this.initVis();
   }
@@ -77,9 +78,12 @@ class LeafletMap {
                                 .style('opacity', 1)
                                 .style('z-index', 1000000)
                                   // Format number with million and thousand separator
-                                .html(`<div class="tooltip-label">Call received: ${d.REQUESTED_DATETIME}</div><p>${d.DESCRIPTION}</p>`);
-
-                          })
+                                .html(`<div class="tooltip-label">Call received: </div><div class="tooltip">${d.REQUESTED_DATETIME}</div></br>
+                                      <div class="tooltip-label">Updated data: </div><div class="tooltip">${d.UPDATED_DATE}</div></br>
+                                      <div class="tooltip-label">Public Agency: </div><div class="tooltip">${d.AGENCY_RESPONSIBLE}</div></br>
+                                      <div class="tooltip-label">Service Details: </div><div class="tooltip">${d.SERVICE_NAME}</div></br>
+                                      <div class="tooltip-label">Service Description: </div><div class="tooltip">${d.DESCRIPTION || "None"}</div></br>`);
+                        })
                         .on('mousemove', (event) => {
                             //position the tooltip
                             d3.select('#tooltip')

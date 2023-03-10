@@ -17,9 +17,9 @@ d3.tsv('/data/Cincy311_2022_final.tsv')
       d.SERVICE_NAME = (d.SERVICE_NAME).replace(/(^"|"$)/g, "").trim(); //SERVICE_NAME - remove quotes
       d.SERVICE_CODE = (d.SERVICE_CODE).replace(/(^"|"$)/g, "").trim(); //SERVICE_CODE - remove quotes
       d.DESCRIPTION = (d.DESCRIPTION).replace(/(^"|"$)/g, "").trim(); //DESCRIPTION - remove quotes
-      d.REQUESTED_DATETIME = parseTime(d.REQUESTED_DATETIME); //REQUESTED_DATETIME - convert to D3 datetime
-      d.UPDATED_DATETIME = parseTime(d.UPDATED_DATETIME); //UPDATED_DATETIME - convert to D3 datetime
-      d.EXPECTED_DATETIME = parseTime(d.EXPECTED_DATETIME); //EXPECTED_DATETIME - convert to D3 datetime
+      //d.REQUESTED_DATETIME = parseTime(d.REQUESTED_DATETIME); //REQUESTED_DATETIME - convert to D3 datetime
+      //d.UPDATED_DATETIME = parseTime(d.UPDATED_DATETIME); //UPDATED_DATETIME - convert to D3 datetime
+      //d.EXPECTED_DATETIME = parseTime(d.EXPECTED_DATETIME); //EXPECTED_DATETIME - convert to D3 datetime
       d.ADDRESS = (d.ADDRESS).replace(/(^"|"$)/g, "").trim(); //ADDRESS - remove quotes
       d.LATITUDE = +d.LATITUDE; //LATITUDE - convert to number
       d.LONGITUDE = +d.LONGITUDE; //LONGITUDE - convert to number
