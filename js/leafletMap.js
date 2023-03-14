@@ -24,6 +24,7 @@ class LeafletMap {
     });
     //this.parseDateForDisplay = d3.time.format("%x_%X").parse;
     this.colorVar = _colorVar;
+    this.stUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
     this.initVis();
   }
   
@@ -34,7 +35,6 @@ class LeafletMap {
     let vis = this;
 
     //Stamen Terrain
-    vis.stUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
     vis.stAttr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
     //this is the base map layer, where we are showing the map background
@@ -115,7 +115,6 @@ class LeafletMap {
 
   updateVis() {
     let vis = this;
-
     //want to see how zoomed in you are? 
     // console.log(vis.map.getZoom()); //how zoomed am I
     
@@ -134,6 +133,21 @@ class LeafletMap {
       .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
       .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
       .attr("r", vis.radiusSize);
+  }
+
+  updateBaseTile(newTile){
+    let vis = this;
+    vis.stUrl = newTile;
+
+    // Updating the tiling of the map base layer
+    vis.theMap.removeLayer(vis.base_layer);
+    //this is the base map layer, where we are showing the map background
+    vis.base_layer = L.tileLayer(vis.stUrl, {
+      id: 'st-image',
+      attribution: vis.stAttr,
+      ext: 'png'
+    });
+    vis.theMap.addLayer(vis.base_layer);
   }
 
 

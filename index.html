@@ -15,6 +15,15 @@
         <option value="color_publicAgency">Color by PUBLIC AGENCY</option>
     </select>
 
+    <label for="mapBackgroundToggleLabel">Choose a map background:</label>
+    <select name="mapBGToggle" id="mapBGToggle" onchange="updateMapBackground(this.value)">
+        <option value="default">Default</option>
+        <option value="color">Color</option>
+        <option value="streets">Streets</option>
+        <option value="dark">Dark</option>
+        <option value="gray">Gray</option>
+    </select>
+
     <div id="mapDiv"></div>
     
 

@@ -1,7 +1,5 @@
 let leafletMap; //global variable
 
-console.log("Start of code")
-
 d3.dsv("|","/data/cincy311_cleaned.tsv")
   .then(data =>{
     console.log('Data loading complete. Work with dataset.');
@@ -23,12 +21,9 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     //Plot map
     leafletMap = new LeafletMap({ parentElement: '#mapDiv'}, data, null);
 
-
-
-    console.log(data)
+    // console.log(data)
   })
 .catch(error => {
-    // console.error('Error loading the data');
     console.log(error);
 });
 
@@ -50,5 +45,23 @@ function updateMapMarkerColor(val){
     //leafletMap.colorVar = "AGENCY_RESPONSIBLE";
     //TODO figure out how to group categories - currently like 900 (ahhhh)
     //leafletMap.updateVis();
+  }
+}
+
+function updateMapBackground(val){
+  if (val == "default"){
+    leafletMap.updateBaseTile('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}');
+  }
+  else if (val == "color"){
+    leafletMap.updateBaseTile('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png');
+  }
+  else if (val == "streets"){
+    leafletMap.updateBaseTile('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png');
+  }
+  else if (val == "dark"){
+    leafletMap.updateBaseTile('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png');
+  }
+  else if (val == "gray"){
+    leafletMap.updateBaseTile('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png');
   }
 }
