@@ -89,25 +89,28 @@ class LeafletMap {
               .attr("fill", "red") //change the fill
               .attr('r', 4); //change radius
 
-            //create a tool tip
-            d3.select('#tooltip')
-              .style('left', (event.pageX + 10) + 'px')   
-              .style('top', (event.pageY + 10) + 'px')
-              .style('display', 'block')
-                // Format number with million and thousand separator
-              .html(`<div class="tooltip-label">Call received: </div><div class="tooltip">${d.requested_datetime.toDateString()}</div></br>
-                    <div class="tooltip-label">Updated data: </div><div class="tooltip">${d.updated_datetime}</div></br>
-                    <div class="tooltip-label">Public Agency: </div><div class="tooltip">${d.agency_responsible}</div></br>
-                    <div class="tooltip-label">Service Details: </div><div class="tooltip">${d.service_name}</div></br>
-                    <div class="tooltip-label">Service Description: </div><div class="tooltip">${d.description || "None"}</div></br>`);
-            }
-          }
-        )           
-        .on('mouseleave', function() { //function to add mouseover event
-            d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
-              .duration('150') //how long we are transitioning between the two states (works like keyframes)
-              .attr("fill", "steelblue") //change the fill
-              .attr('r', 3) //change radius
+                            //create a tool tip
+                            d3.select('#tooltip')
+                                .style('opacity', 1)
+                                .style('z-index', 1000000)
+                                  // Format number with million and thousand separator
+                                .html(`<div class="tooltip-label">Call received: </div><div class="tooltip">${d.requested_datetime}</div></br>
+                                      <div class="tooltip-label">Updated data: </div><div class="tooltip">${d.updated_date}</div></br>
+                                      <div class="tooltip-label">Public Agency: </div><div class="tooltip">${d.agency_responsible}</div></br>
+                                      <div class="tooltip-label">Service Details: </div><div class="tooltip">${d.service_name}</div></br>
+                                      <div class="tooltip-label">Service Description: </div><div class="tooltip">${d.description || "None"}</div></br>`);
+                        })
+                        .on('mousemove', (event) => {
+                            //position the tooltip
+                            d3.select('#tooltip')
+                             .style('left', (event.pageX + 10) + 'px')   
+                             .style('top', (event.pageY + 10) + 'px');
+                         })              
+                        .on('mouseleave', function() { //function to add mouseover event
+                            d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
+                              .duration('150') //how long we are transitioning between the two states (works like keyframes)
+                              .attr("fill", "steelblue") //change the fill
+                              .attr('r', 3) //change radius
 
             d3.select('#tooltip').style('display', 'none');
           })
