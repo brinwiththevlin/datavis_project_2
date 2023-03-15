@@ -10,20 +10,12 @@ class LeafletMap {
       parentElement: _config.parentElement,
     }
     
-    this.unmapped = 0;
-    this.data = [];
+    this.unmappedCount = data.filter(d => d.unmapped === true).length;
+    this.data = data;
 
-    _data.forEach(d => {
-      //removes invalid rows and saves to mydata
-      if(isNaN(d.latitude) || isNaN(d.longitude) || d.latitude == 0 || d.longitude == 0){
-        this.unmapped = this.unmapped + 1;     
-      }
-      else{
-        this.data.push(d);
-      }
-    });
     //this.parseDateForDisplay = d3.time.format("%x_%X").parse;
     this.colorVar = _colorVar;
+    this.stUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
     this.initVis();
   }
   
@@ -34,7 +26,6 @@ class LeafletMap {
     let vis = this;
 
     //Stamen Terrain
-    vis.stUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
     vis.stAttr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
     //this is the base map layer, where we are showing the map background
@@ -55,56 +46,7 @@ class LeafletMap {
     vis.overlay = d3.select(vis.theMap.getPanes().overlayPane)
     vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto")
 
-    //these are the city locations, displayed as a set of dots 
-    vis.Dots = vis.svg.selectAll('circle')
-                    .data(vis.data) 
-                    .join('circle')
-                        .attr("fill", "steelblue") 
-                        .attr("stroke", "black")
-                        //Leaflet has to take control of projecting points. Here we are feeding the latitude and longitude coordinates to
-                        //leaflet so that it can project them on the coordinates of the view. Notice, we have to reverse lat and lon.
-                        //Finally, the returned conversion produces an x and y point. We have to select the the desired one using .x or .y
-                        .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
-                        .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y) 
-                        .attr("r", 3)
-                        .on('mouseover', function(event,d) { //function to add mouseover event
-                            d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
-                              .duration('150') //how long we are transitioning between the two states (works like keyframes)
-                              .attr("fill", "red") //change the fill
-                              .attr('r', 4); //change radius
 
-                            //create a tool tip
-                            d3.select('#tooltip')
-                                .style('opacity', 1)
-                                .style('z-index', 1000000)
-                                  // Format number with million and thousand separator
-                                .html(`<div class="tooltip-label">Call received: </div><div class="tooltip">${d.requested_datetime}</div></br>
-                                      <div class="tooltip-label">Updated data: </div><div class="tooltip">${d.updated_date}</div></br>
-                                      <div class="tooltip-label">Public Agency: </div><div class="tooltip">${d.agency_responsible}</div></br>
-                                      <div class="tooltip-label">Service Details: </div><div class="tooltip">${d.service_name}</div></br>
-                                      <div class="tooltip-label">Service Description: </div><div class="tooltip">${d.description || "None"}</div></br>`);
-                        })
-                        .on('mousemove', (event) => {
-                            //position the tooltip
-                            d3.select('#tooltip')
-                             .style('left', (event.pageX + 10) + 'px')   
-                              .style('top', (event.pageY + 10) + 'px');
-                         })              
-                        .on('mouseleave', function() { //function to add mouseover event
-                            d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
-                              .duration('150') //how long we are transitioning between the two states (works like keyframes)
-                              .attr("fill", "steelblue") //change the fill
-                              .attr('r', 3) //change radius
-
-                            d3.select('#tooltip').style('opacity', 0);//turn off the tooltip
-
-                          })
-                        .on('click', (event, d) => { //experimental feature I was trying- click on point and then fly to it
-                           // vis.newZoom = vis.theMap.getZoom()+2;
-                           // if( vis.newZoom > 18)
-                           //  vis.newZoom = 18; 
-                           // vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
-                          });
     
     //handler here for updating the map, as you zoom in and out           
     vis.theMap.on("zoomend", function(){
@@ -116,6 +58,65 @@ class LeafletMap {
   updateVis() {
     let vis = this;
 
+    vis.Dots = vis.svg.selectAll('circle')
+    .data(vis.data)
+    .join('circle')
+        .attr("fill", "steelblue") 
+        .attr("stroke", "black")
+        //Leaflet has to take control of projecting points. Here we are feeding the latitude and longitude coordinates to
+        //leaflet so that it can project them on the coordinates of the view. Notice, we have to reverse lat and lon.
+        //Finally, the returned conversion produces an x and y point. We have to select the the desired one using .x or .y
+        .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
+        .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y) 
+        .attr("r", d => {
+          if(d.filtered === true){
+            return 0.1; // makes it easier to select the visible circles
+          }else{
+            return 3;
+          }
+        })
+        .attr('class', d => {
+          if(d.filtered === true){
+            return 'filtered'
+          }else{
+            return ''
+          }
+        })
+        .on('mouseover', function(event, d) { //function to add mouseover event
+          if(d.filtered === false){
+            d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
+              .duration('150') //how long we are transitioning between the two states (works like keyframes)
+              .attr("fill", "red") //change the fill
+              .attr('r', 4); //change radius
+
+            //create a tool tip
+            d3.select('#tooltip')
+              .style('left', (event.pageX + 10) + 'px')   
+              .style('top', (event.pageY + 10) + 'px')
+              .style('display', 'block')
+                // Format number with million and thousand separator
+              .html(`<div class="tooltip-label">Call received: </div><div class="tooltip">${d.requested_date.toDateString()}</div></br>
+                    <div class="tooltip-label">Updated data: </div><div class="tooltip">${d.updated_date}</div></br>
+                    <div class="tooltip-label">Public Agency: </div><div class="tooltip">${d.agency_responsible}</div></br>
+                    <div class="tooltip-label">Service Details: </div><div class="tooltip">${d.service_name}</div></br>
+                    <div class="tooltip-label">Service Description: </div><div class="tooltip">${d.description || "None"}</div></br>`);
+            }
+          }
+        )           
+        .on('mouseleave', function() { //function to add mouseover event
+            d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
+              .duration('150') //how long we are transitioning between the two states (works like keyframes)
+              .attr("fill", "steelblue") //change the fill
+              .attr('r', 3) //change radius
+
+            d3.select('#tooltip').style('display', 'none');
+          })
+        .on('click', (event, d) => { //experimental feature I was trying- click on point and then fly to it
+            // vis.newZoom = vis.theMap.getZoom()+2;
+            // if( vis.newZoom > 18)
+            //  vis.newZoom = 18; 
+            // vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
+          });
     //want to see how zoomed in you are? 
     // console.log(vis.map.getZoom()); //how zoomed am I
     
@@ -128,12 +129,26 @@ class LeafletMap {
     //   radiusSize = desiredMetersForPoint / metresPerPixel;
     // }
   
-   
    //redraw based on new zoom- need to recalculate on-screen position
     vis.Dots
       .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
       .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
       .attr("r", vis.radiusSize);
+  }
+
+  updateBaseTile(newTile){
+    let vis = this;
+    vis.stUrl = newTile;
+
+    // Updating the tiling of the map base layer
+    vis.theMap.removeLayer(vis.base_layer);
+    //this is the base map layer, where we are showing the map background
+    vis.base_layer = L.tileLayer(vis.stUrl, {
+      id: 'st-image',
+      attribution: vis.stAttr,
+      ext: 'png'
+    });
+    vis.theMap.addLayer(vis.base_layer);
   }
 
 
