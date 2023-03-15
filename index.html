@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Project 2 - Bryan, Daniel, Lina, Sam</title>
-    <link rel="stylesheet" href="css/leaflet.css">
-    <link rel="stylesheet" href="css/style.css">
+    <title>Who you gonna call? 3-1-1!</title>
+    <link rel="stylesheet" href="styles/leaflet.css">
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-    <!-- Dropdown for color option of map -->
-    <label for="mapMarkerColor">Choose a marker color scheme:</label>
-    <select name="mapMarkerColor" id="mapMarkerColor" onchange="updateMapMarkerColor(this.value)">
-        <option value="color_callType">Color by CALL TYPE</option>
-        <option value="color_timeBetween">Color by TIME BETWEEN REQUESTED DATE AND UPDATED DATE</option>
-        <option value="color_daysInYear">Color by DAYS IN THE YEAR</option>
-        <option value="color_publicAgency">Color by PUBLIC AGENCY</option>
-    </select>
-
-    <label for="mapBackgroundToggleLabel">Choose a map background:</label>
-    <select name="mapBGToggle" id="mapBGToggle" onchange="updateMapBackground(this.value)">
-        <option value="default">Default</option>
-        <option value="color">Color</option>
-        <option value="streets">Streets</option>
-        <option value="dark">Dark</option>
-        <option value="gray">Gray</option>
-    </select>
-
-    <div id="mapDiv"></div>
-    
-
-
+    <div class="pageInfo">
+        <p>
+            <span class="title">Who you gonna call? 3-1-1!</span>
+            <span class="name"> | By: Bryan Cora, Lina Kaval, Daniel Hackney, Sam Shaw | CS6024 Project 2 | <a href="https://github.com/brinwiththevlin/datavis_project_2">GitHub</a></span>
+        </p>
+    </div>
+    <div class="flex-container">
+        <div class="mapContainer flex-container">
+            <h2>Cincinnati 311 Calls</h2>
+            <!-- Dropdown for color option of map -->
+            <label for="mapMarkerColor">Choose a marker color scheme:</label>
+            <select name="mapMarkerColor" id="mapMarkerColor" onchange="updateMapMarkerColor(this.value)">
+                <option value="color_callType">Color by CALL TYPE</option>
+                <option value="color_timeBetween">Color by TIME BETWEEN REQUESTED DATE AND UPDATED DATE</option>
+                <option value="color_daysInYear">Color by DAYS IN THE YEAR</option>
+                <option value="color_publicAgency">Color by PUBLIC AGENCY</option>
+            </select>
+            <!-- Dropdown for background of map -->
+            <label for="mapBackgroundToggleLabel">Choose a map background:</label>
+            <select name="mapBGToggle" id="mapBGToggle" onchange="updateMapBackground(this.value)">
+                <option value="default">Default</option>
+                <option value="color">Color</option>
+                <option value="streets">Streets</option>
+                <option value="dark">Dark</option>
+                <option value="gray">Gray</option>
+            </select>
+            <div id="mapDiv"></div>
+        </div>
+    </div>
 
     <!-- Libraries and Misc -->
     <script src="js/d3.v6.min.js"></script>
     <script src="js/leaflet.js"></script>
-
-    <!-- My JS files -->
+    <!-- JS files -->
     <script src="js/main.js"></script>
     <script src="js/leafletMap.js"></script>
 
