@@ -22,10 +22,10 @@ button {
 
 .pageInfo {
   flex-basis: 100%;
+  z-index: 999;
   background-color: rgb(214, 245, 216);
   position: sticky;
   top: 0px;
-  z-index: 999;
 }
 .pageInfo p {
   text-align: center;
@@ -63,11 +63,11 @@ button {
 }
 
 .footerBar {
-  position: absolute;
+  position: sticky;
   width: 100%;
+  z-index: 999;
   bottom: 0px;
   background-color: aliceblue;
-  z-index: 999;
 }
 .footerBar div {
   margin-top: 10px;
