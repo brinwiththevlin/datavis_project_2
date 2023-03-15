@@ -15,7 +15,7 @@ class HeatMap {
     }
     
     // set the dimensions and margins of the graph
-    let myrollup = d3.rollup(_data, v => v.length, d => d.requested_datetime)
+    let myrollup = d3.rollup(_data, v => v.length, d => d.requested_date)
     this.data = Array.from(myrollup, ([calDate, count]) => ({
       calDate: calDate,
       weeknum: d3.timeFormat("%U")(d3.timeParse("%m/%d/%Y")(calDate)),
