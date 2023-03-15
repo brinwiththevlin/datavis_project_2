@@ -25,6 +25,7 @@ button {
   background-color: rgb(214, 245, 216);
   position: sticky;
   top: 0px;
+  z-index: 999;
 }
 .pageInfo p {
   text-align: center;
@@ -66,6 +67,7 @@ button {
   width: 100%;
   bottom: 0px;
   background-color: aliceblue;
+  z-index: 999;
 }
 .footerBar div {
   margin-top: 10px;
