@@ -65,7 +65,7 @@ button {
 .footerBar {
   position: sticky;
   width: 100%;
-  z-index: 999;
+  z-index: 999999;
   bottom: 0px;
   background-color: aliceblue;
 }
