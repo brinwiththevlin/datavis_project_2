@@ -24,6 +24,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
       // Derived properties
       d.weekdayRequested = d.requested_date.toDateString().split(' ')[0];
+      d.daysBetween = Math.trunc((new Date(d.updated_date).getTime() - new Date(d.requested_date).getTime()) / (1000 * 3600 * 24));
       d.filtered = false;
       if(isNaN(d.latitude) || isNaN(d.longitude) || d.latitude == 0 || d.longitude == 0){
         d.unmapped = true;
@@ -40,6 +41,11 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
       parentElement: '#callsByWeekDay',
       }, data, "weekdayRequested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
     callsByWeekDay.updateVis();
+
+    requestReceivedUpdated = new Histogram({
+      parentElement: '#requestReceivedUpdated',
+    }, data, "daysBetween", "Days Between Call Received and Issue Updated", "Days Between Dates", "Number of Calls")
+    requestReceivedUpdated.updateVis(10);
 
     filterableVisualizations = [leafletMap, callsByWeekDay];
     filterData(); // initializes filteredData array (to show count on refresh)
