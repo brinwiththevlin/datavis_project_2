@@ -10,7 +10,7 @@ class LeafletMap {
       parentElement: _config.parentElement,
     }
     this.data = _data;
-    this.colorCol = _colorCol;
+    this.colorCol = _colorCol;  
     this.initVis();
   }
   
@@ -47,27 +47,27 @@ class LeafletMap {
     vis.overlay = d3.select(vis.theMap.getPanes().overlayPane)
     vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto")
 
-    //these are the city locations, displayed as a set of dots 
+    //NOTE: keep this in initVis so we don't have to keep rendering circles over and over, only updating
     vis.Dots = vis.svg.selectAll('circle')
       .data(vis.data) 
       .join('circle')
           .attr("fill", d => vis.colorScale(vis.colorValue(d))) 
-          .attr("stroke", "black")
+          
           .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
           .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y) 
           .attr("r", 3)
           .on('mouseover', function(event,d) { //function to add mouseover event
               d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
                 .duration('150') //how long we are transitioning between the two states (works like keyframes)
-                .attr("fill", "red") //change the fill
-                .attr('r', 4); //change radius
+                .attr('r', 4) //change radius
+                .attr("stroke", "black");
 
               //create a tool tip
               d3.select('#tooltip')
                   .style('opacity', 1)
                   .style('z-index', 1000000)
                     // Format number with million and thousand separator
-                  .html(`<div class="tooltip-label">Call received: ${d.REQUESTED_DATETIME}</div><p>${d.DESCRIPTION}</p>`);
+                  .html(`<div class="tooltip-label">Call received: ${d.requested_date}</div><p>${d.description}</p>`);
 
             })
           .on('mousemove', (event) => {
@@ -81,6 +81,7 @@ class LeafletMap {
                 .duration('150') //how long we are transitioning between the two states (works like keyframes)
                 .attr("fill", d => vis.colorScale(vis.colorValue(d))) //change the fill
                 .attr('r', 3) //change radius
+                .attr("stroke", "none")
 
               d3.select('#tooltip').style('opacity', 0);//turn off the tooltip
 
@@ -102,31 +103,135 @@ class LeafletMap {
   updateVis() {
     let vis = this;
 
+    //clear old legend 
+    d3.selectAll("#mapLegend > *").remove();
+
+    //Create legend
+    vis.legendSvg = d3.select("#mapLegend")
+      .append("svg")
+      .attr("width", 300)
+      .attr("height", 200);
+
+    // Add legend title for coloring
+    vis.legendSvg.append('text')
+      .attr('class', 'axis-title')
+      .attr('x', 5)
+      .attr('y', 5)
+      .attr('dy', '.71em')
+      .style('font-weight', 'bold')
+      .text('Color legend');
+
+
+
+    //TODO source: https://cagis.hamilton-co.org/311/
     if(vis.colorCol == "color_callType"){
       vis.colorValue = d => d.category;
       vis.colorScale = d3.scaleOrdinal()
         .range(d3.schemePaired) 
         .domain(["Accessibility", "Public Health", "Transportation & Engineering", "Public Services", "Police", "Buildings and Inspections", "City Admin", "Sewer and water", "Schools, parks, recreation", "Rentals", "Other"])  
+      vis.legendCat = ["Accessibility", "Public Health", "Transportation & Engineering", "Public Services", "Police", "Buildings and Inspections", "City Admin", "Sewer and water", "Schools, parks, recreation", "Rentals", "Other"];
+    
+        // Add one dot in the legend for each star
+      vis.legendSvg.selectAll("legendDots")
+        .data(vis.legendCat)
+        .enter()
+      .append("circle")
+        .attr("cx", 10)
+        .attr("cy", function(d,i){ return 25 + i*12}) // 25 is where the first dot appears. 10 is the distance between dots
+        .attr("r", 5)
+        .style("fill", d => vis.colorScale(d))
+      
+      vis.legendSvg.selectAll("legendText")
+          .data(vis.legendCat)
+          .enter()
+        .append("text")
+          .attr("x", 30)
+          .attr("y", function(d,i){ return 25 + i*12}) // 25 is where the first dot appears. 10 is the distance between dots
+          .text(d => d)
+          .attr("text-anchor", "left")
+          .style("alignment-baseline", "middle")
+          .style("font-weight", "bold")
     }
     else if (vis.colorCol == "color_timeBetween"){
       vis.colorValue = d => d.days_between;
-      vis.colorScale = d3.scaleOrdinal()
-        .range(d3.schemePaired) 
+      vis.colorScale = d3.scaleLinear()
+        .range(["white", "#023020"])
         .domain(d3.extent(vis.data, vis.colorValue))
+      vis.legendCat = Array.from({length: 20}, (x, i) => i);
+      vis.legendScale = d3.scaleLinear().range(["white", "#023020"]).domain([0,20]);
 
+      // Add one dot in the legend for each star
+      vis.legendSvg.selectAll("legendBar")
+        .data(vis.legendCat)
+        .enter()
+      .append("rect")
+        .attr("x", function(d,i){ return 25 + i*10})
+        .attr("y", 25)
+        .attr("width", 10)
+        .attr("height", 20)
+        .style("fill", d => vis.legendScale(d))
+      
+      vis.legendSvg.append('text')
+        .attr('x', 25)
+        .attr('y', 50)
+        .attr('dy', '.71em')
+        .text('0 days -> 53 days');
+  
     }
     else if (vis.colorCol == "color_daysInYear"){
-      //TODO finish
+      vis.colorValue = d => d.requested_date;
+      vis.colorScale = d3.scaleLinear()
+        .range(["white", "#023020"])
+        .domain(d3.extent(vis.data, vis.colorValue))
+      vis.legendCat = Array.from({length: 20}, (x, i) => i);
+      vis.legendScale = d3.scaleLinear().range(["white", "#023020"]).domain([0,20])
+
+      // Add one dot in the legend for each star
+      vis.legendSvg.selectAll("legendBar")
+        .data(vis.legendCat)
+        .enter()
+      .append("rect")
+        .attr("x", function(d,i){ return 25 + i*10})
+        .attr("y", 25)
+        .attr("width", 10)
+        .attr("height", 20)
+        .style("fill", d => vis.legendScale(d))
+      
+      vis.legendSvg.append('text')
+        .attr('x', 25)
+        .attr('y', 50)
+        .attr('dy', '.71em')
+        .text('1/1/2022 -> 12/31/2022');
     }
+    
     else if (vis.colorCol == "color_publicAgency"){
-      vis.colorValue = d => d.days_between;
+      vis.colorValue = d => d.agency_with_other;
       vis.colorScale = d3.scaleOrdinal()
         .range(d3.schemePaired) 
         .domain(d3.extent(vis.data, vis.colorValue))
+      vis.legendCat = ["Fire Dept", "Cin Water Works", "Park Department", "Police Department", "City Manager's Office", "Dept of Trans and Eng", "Cinc Health Dept", "Cinc Building Dept", "Public Services", "Other"];
+
+      // Add one dot in the legend for each star
+      vis.legendSvg.selectAll("legendDots")
+        .data(vis.legendCat)
+        .enter()
+      .append("circle")
+        .attr("cx", 10)
+        .attr("cy", function(d,i){ return 25 + i*12}) // 25 is where the first dot appears. 10 is the distance between dots
+        .attr("r", 5)
+        .style("fill", d => vis.colorScale(d))
+      
+      vis.legendSvg.selectAll("legendText")
+          .data(vis.legendCat)
+          .enter()
+        .append("text")
+          .attr("x", 30)
+          .attr("y", function(d,i){ return 25 + i*12}) // 25 is where the first dot appears. 10 is the distance between dots
+          .text(d => d)
+          .attr("text-anchor", "left")
+          .style("alignment-baseline", "middle")
+          .style("font-weight", "bold")
     }
-
-
-
 
     //want to see how zoomed in you are? 
     // console.log(vis.map.getZoom()); //how zoomed am I
@@ -153,8 +258,10 @@ class LeafletMap {
   renderVis() {
     let vis = this;
 
-    //not using right now... 
- 
+        
+    
+
+   
   }
 
 

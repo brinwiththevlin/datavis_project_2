@@ -21,8 +21,9 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
       d.address = (d.address).replace(/(^"|"$)/g, "").trim(); //address - remove quotes
       d.latitude = +d.latitude; //latitude - convert to number
       d.longitude = +d.longitude; //longitude - convert to number
-      d.days_between = Math.trunc((d.updated_date - d.requested_date)/(8.64e+7));//d3.timeMinute.range(new Date(d.requested_date), new Date(d.updated_date));
+      d.days_between = Math.trunc((d.updated_date - d.requested_date)/(8.64e+7));//d3.timeMinute.range(new Date(d.requested_date), new Date(d.updated_date)); TODO fix to remove -1
       d.category = this.serviceNameCategories(d);
+      d.agency_with_other = this.agencyResponsibleOther(d);
     })
     console.log(data)
 
@@ -136,8 +137,18 @@ function serviceNameCategories(d){
   
 }
 
+function agencyResponsibleOther(d){
+  //console.log(d.agency_responsible)
+  //let agencies = ["Fire Dept", "Cin Water Works", "Park Department", "Police Department", "City Manager's Office", "Dept of Trans and Eng", "Cinc Health Dept", "Cinc Building Dept", "Public Services"];
+  let agencies_other = ["Law Department", "Community Development", "Metropolitan Sewer", "Cincinnati Recreation", "Enterprise Services", "Regional Computer Center", "Treasury Department"];
+  if (agencies_other.includes(d.agency_responsible)){
+    return "Other";
+  }
+  return d.agency_responsible
+}
+
+
 function updateMapMarkerColor(val){
-  console.log(val)
   leafletMap.colorCol = val;
   leafletMap.updateVis();
 }
