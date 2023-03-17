@@ -98,19 +98,19 @@ button {
   color: white;
 }
 
-.barchart {
+.barchart, .histogram {
   border: 3px solid black;
   margin: 20px;
 }
-.barchart .bar {
+.barchart .bar, .histogram .bar {
   fill: rgb(105, 179, 162);
   cursor: pointer;
 }
-.barchart .x-axis .tick text.active {
+.barchart .x-axis .tick text.active, .histogram .x-axis .tick text.active {
   stroke: #676565;
   paint-order: stroke;
 }
-.barchart .x-axis .tick text {
+.barchart .x-axis .tick text, .histogram .x-axis .tick text {
   cursor: pointer;
 }
 
