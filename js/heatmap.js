@@ -83,7 +83,7 @@ class HeatMap {
    
     // Build color scale
     vis.myColor = d3.scaleLinear()
-      .range(["white", "#023020"])
+      .range(["#f1dbea", "violet"])
       .domain([0,d3.max(vis.data, d => d.count)])
 
     vis.renderVis()
