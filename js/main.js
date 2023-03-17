@@ -23,6 +23,9 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
       d.longitude = +d.longitude; //longitude - convert to number
 
       // Derived properties
+      d.days_between = Math.trunc((d.updated_date - d.requested_date)/(8.64e+7));//d3.timeMinute.range(new Date(d.requested_date), new Date(d.updated_date)); TODO fix to remove -1
+      d.category = this.serviceNameCategories(d);
+      d.agency_with_other = this.agencyResponsibleOther(d);
       d.weekdayRequested = d.requested_date.toDateString().split(' ')[0];
       d.filtered = false;
       if(isNaN(d.latitude) || isNaN(d.longitude) || d.latitude == 0 || d.longitude == 0){
@@ -43,7 +46,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     filterableVisualizations = [leafletMap, callsByWeekDay];
     filterData(); // initializes filteredData array (to show count on refresh)
-    // console.log(data)
+    console.log(data)
   })
 .catch(error => {
     console.log(error);
