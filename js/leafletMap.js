@@ -179,7 +179,7 @@ class LeafletMap {
   
     }
     else if (vis.colorCol == "color_daysInYear"){
-      vis.colorValue = d => d.requested_date;
+      vis.colorValue = d => new Date(d.requested_date);
       vis.colorScale = d3.scaleLinear()
         .range(["white", "#023020"])
         .domain(d3.extent(vis.data, vis.colorValue))

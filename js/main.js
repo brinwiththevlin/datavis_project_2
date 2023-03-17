@@ -10,23 +10,29 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     data = _data;
     console.log('Data loading complete. Work with dataset.');
     //process the data
+
+    parseTime = d3.timeParse("%Y-%m-%d")
     data.forEach(d => {
+      let requested_parse = parseTime(d.requested_date)
       //TODO confirm that replace method doesn't remove " from that is not leading or trailing
       d.service_name = (d.service_name).replace(/(^"|"$)/g, "").trim(); //service_name - remove quotes
       d.service_code = (d.service_code).replace(/(^"|"$)/g, "").trim(); //service_code - remove quotes
       d.description = (d.description).replace(/(^"|"$)/g, "").trim(); //description - remove quotes
-      d.requested_date = new Date(d.requested_date);
-      //d.updated_date = parseTime(d.updated_date); //updated_date - convert to D3 datetime
-      //d.expected_date = parseTime(d.expected_date); //expected_date - convert to D3 datetime
+      
+      d.requested_date = d3.timeFormat("%m/%d/%Y")(requested_parse); //requested_datetime - convert to D3 datetime
+      d.updated_date = d3.timeFormat("%m/%d/%Y")(parseTime(d.updated_date)); //updated_datetime - convert to D3 datetime
+      d.expected_date = d3.timeFormat("%m/%d/%Y")(parseTime(d.expected_date)); //expected_datetime - convert to D3 datetime
+      
       d.address = (d.address).replace(/(^"|"$)/g, "").trim(); //address - remove quotes
       d.latitude = +d.latitude; //latitude - convert to number
       d.longitude = +d.longitude; //longitude - convert to number
 
       // Derived properties
-      d.days_between = Math.trunc((d.updated_date - d.requested_date)/(8.64e+7));//d3.timeMinute.range(new Date(d.requested_date), new Date(d.updated_date)); TODO fix to remove -1
+      d.days_between =  Math.trunc((new Date(d.updated_date).getTime() - new Date(d.requested_date).getTime()) / (1000 * 3600 * 24))
       d.category = this.serviceNameCategories(d);
       d.agency_with_other = this.agencyResponsibleOther(d);
-      d.weekdayRequested = d.requested_date.toDateString().split(' ')[0];
+      d.weekday_requested = d3.timeFormat("%a")(requested_parse);
+      d.week_requested = d3.timeFormat("%U")(requested_parse);
       d.filtered = false;
       if(isNaN(d.latitude) || isNaN(d.longitude) || d.latitude == 0 || d.longitude == 0){
         d.unmapped = true;
@@ -41,7 +47,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     callsByWeekDay = new Barchart({
       parentElement: '#callsByWeekDay',
-      }, data, "weekdayRequested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
+      }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
     callsByWeekDay.updateVis();
 
     filterableVisualizations = [leafletMap, callsByWeekDay];
