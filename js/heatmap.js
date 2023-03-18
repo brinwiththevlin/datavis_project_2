@@ -10,7 +10,7 @@ class HeatMap {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 800,
       containerHeight: _config.containerHeight || 450,
-      margin: _config.margin || {top: 30, right: 30, bottom: 30, left: 30},
+      margin: _config.margin || {top: 30, right: 30, bottom: 150, left: 50},
       tooltipPadding: _config.tooltipPadding || 15
     }
     
@@ -114,6 +114,33 @@ class HeatMap {
       .on('mouseleave', () => {
         d3.select('#tooltip').style('opacity', 0);
       });
+
+      //custom x-axis labels
+      let weekIndex = vis.xScale.domain().filter(d => d%5==0)
+      let days = vis.data.filter(d => weekIndex.includes(d.weeknum) && d.weekday == "Sun" || d.weeknum == 0)
+      days.sort((a,b) => a.weeknum - b.weeknum); 
+      days.forEach((d, i)=>{
+        vis.svg.append('text')
+          .attr('class', 'label')
+          .attr('y', 64*i)
+          .attr('x', -275)
+          .attr('dy', '.71em')
+          .attr("transform", "rotate(-90)")
+          .style('text-anchor', 'end')
+          .text(d.calDate.substring(0, 5));
+      })
+
+      console.log(vis.myGroups)
+      //custom y-axis labels
+      vis.myGroups.forEach((d, i)=>{
+        vis.svg.append('text')
+          .attr('class', 'label')
+          .attr('y', 250 - 40*i)
+          .attr('x', -5)
+          .attr('dy', '.71em')
+          .style('text-anchor', 'end')
+          .text(d);
+      })
     }
 
     fillNullDays(data){

@@ -39,10 +39,10 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     //Plot map
     leafletMap = new LeafletMap({ parentElement: '#mapDiv'}, data, null);
-    leafletMap.updateVis();
+    //leafletMap.updateVis();
 
     heatMap = new HeatMap({ parentElement: '#heatTimeDiv'}, data, null);
-    heatMap.updateVis();
+    //heatMap.updateVis();
     callsByWeekDay = new Barchart({
       parentElement: '#callsByWeekDay',
       }, data, "requested_day", "Calls By Week Day", "Week Day", "Number of Calls", 30);
