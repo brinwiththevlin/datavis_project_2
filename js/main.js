@@ -50,6 +50,11 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
       }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
     callsByWeekDay.updateVis();
 
+    requestReceivedUpdated = new Histogram({
+      parentElement: '#requestReceivedUpdated',
+    }, data, "daysBetween", "Days Between Call Received and Issue Updated", "Days Between Dates", "Number of Calls")
+    requestReceivedUpdated.updateVis(10);
+
     filterableVisualizations = [leafletMap, callsByWeekDay];
     filterData(); // initializes filteredData array (to show count on refresh)
     console.log(data)
