@@ -9,8 +9,10 @@ class LeafletMap {
     this.config = {
       parentElement: _config.parentElement,
     }
+    this.unmappedCount = _data.filter(d => d.unmapped === true).length;
+    this.stUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
     this.data = _data;
-    this.colorCol = _colorCol;  
+    this.colorCol = _colorCol;
     this.initVis();
   }
   
@@ -51,12 +53,19 @@ class LeafletMap {
     vis.Dots = vis.svg.selectAll('circle')
       .data(vis.data) 
       .join('circle')
-          .attr("fill", d => vis.colorScale(vis.colorValue(d))) 
-          
+          .attr("fill", d => vis.colorScale(vis.colorValue(d)))
           .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
           .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y) 
           .attr("r", 3)
+          .attr('class', d => {
+            if(d.filtered === true){
+              return 'filtered'
+            }else{
+              return ''
+            }
+          })
           .on('mouseover', function(event,d) { //function to add mouseover event
+            if(d.filtered === false){
               d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
                 .duration('150') //how long we are transitioning between the two states (works like keyframes)
                 .attr('r', 4) //change radius
@@ -64,12 +73,17 @@ class LeafletMap {
 
               //create a tool tip
               d3.select('#tooltip')
-                  .style('opacity', 1)
-                  .style('z-index', 1000000)
-                    // Format number with million and thousand separator
-                  .html(`<div class="tooltip-label">Call received: ${d.requested_date}</div><p>${d.description}</p>`);
-
-            })
+              .style('left', (event.pageX + 10) + 'px')   
+              .style('top', (event.pageY + 10) + 'px')
+              .style('display', 'block')
+                // Format number with million and thousand separator
+              .html(`<div class="tooltip-label">Requested Date: </div><div class="tooltip">${d.requested_date}</div></br>
+                    <div class="tooltip-label">Updated Date: </div><div class="tooltip">${d.updated_date}</div></br>
+                    <div class="tooltip-label">Public Agency: </div><div class="tooltip">${d.agency_responsible}</div></br>
+                    <div class="tooltip-label">Service Details: </div><div class="tooltip">${d.service_name}</div></br>
+                    <div class="tooltip-label">Service Description: </div><div class="tooltip">${d.description || "None"}</div></br>`);
+            }
+          })
           .on('mousemove', (event) => {
               //position the tooltip
               d3.select('#tooltip')
@@ -82,9 +96,10 @@ class LeafletMap {
                 .attr("fill", d => vis.colorScale(vis.colorValue(d))) //change the fill
                 .attr('r', 3) //change radius
                 .attr("stroke", "none")
-
-              d3.select('#tooltip').style('opacity', 0);//turn off the tooltip
-
+              
+                //create a tool tip
+              d3.select('#tooltip')
+              .style('display', "none")
             })
           .on('click', (event, d) => { //experimental feature I was trying- click on point and then fly to it
               // vis.newZoom = vis.theMap.getZoom()+2;
@@ -97,7 +112,6 @@ class LeafletMap {
     vis.theMap.on("zoomend", function(){
       vis.updateVis();
     });
-
   }
 
   updateVis() {
@@ -120,8 +134,6 @@ class LeafletMap {
       .attr('dy', '.71em')
       .style('font-weight', 'bold')
       .text('Color legend');
-
-
 
     //TODO source: https://cagis.hamilton-co.org/311/
     if(vis.colorCol == "color_callType"){
@@ -203,7 +215,6 @@ class LeafletMap {
         .attr('dy', '.71em')
         .text('1/1/2022 -> 12/31/2022');
     }
-    
     else if (vis.colorCol == "color_publicAgency"){
       vis.colorValue = d => d.agency_with_other;
       vis.colorScale = d3.scaleOrdinal()
@@ -235,9 +246,6 @@ class LeafletMap {
 
     //want to see how zoomed in you are? 
     // console.log(vis.map.getZoom()); //how zoomed am I
-    
-    //want to control the size of the radius to be a certain number of meters? 
-    vis.radiusSize = 3; 
 
     // if( vis.theMap.getZoom > 15 ){
     //   metresPerPixel = 40075016.686 * Math.abs(Math.cos(map.getCenter().lat * Math.PI/180)) / Math.pow(2, map.getZoom()+8);
@@ -245,24 +253,38 @@ class LeafletMap {
     //   radiusSize = desiredMetersForPoint / metresPerPixel;
     // }
    
-   //redraw based on new zoom- need to recalculate on-screen position
+   //redraw based on new zoom and filter status - need to recalculate on-screen position
     vis.Dots
+      .data(vis.data)
       .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
       .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
-      .attr("r", vis.radiusSize) 
-      .attr("fill", d => vis.colorScale(vis.colorValue(d)));
-
-  }
-
-
+      .attr("fill", d => vis.colorScale(vis.colorValue(d)))
+      .attr("r", 3)
+      .attr('class', d => {
+        if(d.filtered === true){
+          return 'filtered'
+        }else{
+          return ''
+        }
+      })
+    }
+    
+    updateBaseTile(newTile){
+      let vis = this;
+      vis.stUrl = newTile;
+  
+      // Updating the tiling of the map base layer
+      vis.theMap.removeLayer(vis.base_layer);
+      //this is the base map layer, where we are showing the map background
+      vis.base_layer = L.tileLayer(vis.stUrl, {
+        id: 'st-image',
+        attribution: vis.stAttr,
+        ext: 'png'
+      });
+      vis.theMap.addLayer(vis.base_layer);
+    }
+  
   renderVis() {
     let vis = this;
-
-        
-    
-
-   
   }
-
-
 }
