@@ -10,7 +10,7 @@ class HeatMap {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 800,
       containerHeight: _config.containerHeight || 450,
-      margin: _config.margin || {top: 30, right: 30, bottom: 150, left: 50},
+      margin: _config.margin || {top: 30, right: 30, bottom: 150, left: 80},
       tooltipPadding: _config.tooltipPadding || 15
     }
     
@@ -115,6 +115,30 @@ class HeatMap {
         d3.select('#tooltip').style('opacity', 0);
       });
 
+      vis.svg.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "middle")
+        .attr("x", vis.width/2)
+        .attr("y", vis.height+60)
+        .text("start of the week (2022)");
+
+      vis.svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "middle")
+        .attr("y", -60)
+        .attr("x", -vis.height/2)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("Day of the week");
+
+      vis.svg.append("text")
+        .attr("class", "title")
+        .attr("text-anchor", "middle")
+        .attr("y", -5)
+        .attr("x", vis.width/2)
+        // .attr("dy", ".75em")
+        // .attr("transform", "rotate(-90)")
+        .text("Density of Calls Per Day");
       //custom x-axis labels
       let weekIndex = vis.xScale.domain().filter(d => d%5==0)
       let days = vis.data.filter(d => weekIndex.includes(d.weeknum) && d.weekday == "Sun" || d.weeknum == 0)
