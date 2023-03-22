@@ -71,7 +71,6 @@ class LeafletMap {
                 .attr('r', 4) //change radius
                 .attr("stroke", "black");
 
-              //create a tool tip
               d3.select('#tooltip')
               .style('left', (event.pageX + 10) + 'px')   
               .style('top', (event.pageY + 10) + 'px')
@@ -89,24 +88,23 @@ class LeafletMap {
               d3.select('#tooltip')
                 .style('left', (event.pageX + 10) + 'px')   
                 .style('top', (event.pageY + 10) + 'px');
-            })              
+          })              
           .on('mouseleave', function() { //function to add mouseover event
               d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
                 .duration('150') //how long we are transitioning between the two states (works like keyframes)
                 .attr("fill", d => vis.colorScale(vis.colorValue(d))) //change the fill
                 .attr('r', 3) //change radius
                 .attr("stroke", "none")
-              
-                //create a tool tip
-              d3.select('#tooltip')
-              .style('display', "none")
-            })
+
+              d3.select('#tooltip').style('display', 'none');
+
+          })
           .on('click', (event, d) => { //experimental feature I was trying- click on point and then fly to it
               // vis.newZoom = vis.theMap.getZoom()+2;
               // if( vis.newZoom > 18)
               //  vis.newZoom = 18; 
               // vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
-            });
+          });
     
     //handler here for updating the map, as you zoom in and out           
     vis.theMap.on("zoomend", function(){
@@ -286,5 +284,6 @@ class LeafletMap {
   
   renderVis() {
     let vis = this;
+
   }
 }
