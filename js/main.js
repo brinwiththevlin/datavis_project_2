@@ -57,7 +57,6 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     filterableVisualizations = [leafletMap, callsByWeekDay];
     filterData(); // initializes filteredData array (to show count on refresh)
-    console.log(data)
   })
 .catch(error => {
     console.log(error);
