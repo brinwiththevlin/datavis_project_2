@@ -9,6 +9,8 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
   .then(_data =>{
     data = _data;
     console.log('Data loading complete. Work with dataset.');
+        
+    parseTime = d3.timeParse("%Y-%m-%d")
     //process the data
 
     parseTime = d3.timeParse("%Y-%m-%d")
@@ -43,8 +45,10 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     //Plot map
     leafletMap = new LeafletMap({ parentElement: '#mapDiv'}, data, null);
-    leafletMap.updateVis();
+    //leafletMap.updateVis();
 
+    heatMap = new HeatMap({ parentElement: '#heatTimeDiv'}, data, null);
+    //heatMap.updateVis();
     callsByWeekDay = new Barchart({
       parentElement: '#callsByWeekDay',
       }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
