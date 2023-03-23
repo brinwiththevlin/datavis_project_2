@@ -15,15 +15,7 @@ class HeatMap {
     }
     
     // set the dimensions and margins of the graph
-    let myrollup = d3.rollup(_data, v => v.length, d => d.requested_date)
-    this.data = Array.from(myrollup, ([calDate, count]) => ({
-      calDate: calDate,
-      weeknum: +d3.timeFormat("%U")(d3.timeParse("%m/%d/%Y")(calDate)),
-      weekday: d3.timeFormat("%a")(d3.timeParse("%m/%d/%Y")(calDate)),
-      count: count
-    }));
-
-    this.data = this.fillNullDays(this.data);
+    this.data = _data;
 
     this.initVis();
   }
@@ -70,13 +62,19 @@ class HeatMap {
   }
 
   updateVis(){
-    
-    let vis = this;
+    let vis = this;    
+    let myrollup = d3.rollup(vis.data.filter(d => !d.filtered), v => v.length, d => d.requested_date)
+    vis.data = Array.from(myrollup, ([callDate, count]) => ({
+      callDate: callDate,
+      weeknum: +d3.timeFormat("%U")(d3.timeParse("%m/%d/%Y")(callDate)),
+      weekday: d3.timeFormat("%a")(d3.timeParse("%m/%d/%Y")(callDate)),
+      count: count
+    }));
+    this.data = this.fillNullDays(this.data);
     // append the svg object to the body of the page
     
     // Labels of row and columns
     vis.myGroups = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    
     
     vis.xScale.domain(Array.from({length: 54}, (x, i) => i))
     vis.yScale.domain(vis.myGroups.reverse())
@@ -84,7 +82,7 @@ class HeatMap {
     // Build color scale
     vis.myColor = d3.scaleLinear()
       .range(["#f1dbea", "violet"])
-      .domain([0,d3.max(vis.data, d => d.count)])
+      .domain([0, d3.max(vis.data.filter(d => !d.filtered), d => d.count)])
 
     vis.renderVis()
   }
@@ -92,7 +90,7 @@ class HeatMap {
   renderVis(){
     let vis = this;
       vis.heatmap = vis.svg.selectAll('.heatmap')
-        .data(vis.data)
+        .data(vis.data.filter(d => !d.filtered))
       .join("rect")
         .attr("x", function(d) { return vis.xScale(d.weeknum) })
         .attr("y", function(d) { return vis.yScale(d.weekday) })
@@ -103,8 +101,8 @@ class HeatMap {
         d3.select('#tooltip')
           .style('opacity', 1)
           .style('display', 'block')
-          .html(`<div class="tooltip-label">Calender Date: </div><div class="tooltip">${d.calDate}</div></br>
-                <div class="tooltip-label">Calls received: </div><div class="tooltip">${d.count}</div></br>`)
+          .html(`<div class="tooltip-label">Calender Date: </div><div class="tooltip">${d.callDate}</div></br>
+                <div class="tooltip-label">Calls Received: </div><div class="tooltip">${d.count}</div></br>`)
       })
       .on('mousemove', (event) => {
         d3.select('#tooltip')
@@ -151,10 +149,9 @@ class HeatMap {
           .attr('dy', '.71em')
           .attr("transform", "rotate(-90)")
           .style('text-anchor', 'end')
-          .text(d.calDate.substring(0, 5));
+          .text(d.callDate.substring(0, 5));
       })
 
-      console.log(vis.myGroups)
       //custom y-axis labels
       vis.myGroups.forEach((d, i)=>{
         vis.svg.append('text')
@@ -168,16 +165,14 @@ class HeatMap {
     }
 
     fillNullDays(data){
-      console.log("fillnulldays called")
-
       let lastDay = new Date(2022, 11, 31);
 
       for (var d = new Date(2022, 0, 1); d <= lastDay; d.setDate(d.getDate() + 1)) {
         let stringDate = ((d.getMonth() + 1) < 10 ? '0' : '')+ (d.getMonth() + 1) + "/" + ((d.getDate() < 10 ? '0' : '') + d.getDate())+ "/" +  d.getFullYear();
         //check missing date
-        if (data.filter(d => d.calDate == stringDate).length == 0){
+        if (data.filter(d => d.callDate == stringDate).length == 0){
           let obj ={
-            calDate: stringDate,
+            callDate: stringDate,
             weeknum: +d3.timeFormat("%U")(d3.timeParse("%m/%d/%Y")(stringDate)),
             weekday: d3.timeFormat("%a")(d3.timeParse("%m/%d/%Y")(stringDate)),
             count: 0
