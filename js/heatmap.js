@@ -118,7 +118,7 @@ class HeatMap {
         .attr("text-anchor", "middle")
         .attr("x", vis.width/2)
         .attr("y", vis.height+60)
-        .text("start of the week (2022)");
+        .text("Start of the Week (2022)");
 
       vis.svg.append("text")
         .attr("class", "y label")
@@ -127,7 +127,7 @@ class HeatMap {
         .attr("x", -vis.height/2)
         .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
-        .text("Day of the week");
+        .text("Week Day");
 
       vis.svg.append("text")
         .attr("class", "title")

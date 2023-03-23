@@ -98,6 +98,10 @@ button {
   color: white;
 }
 
+#heatTimeDiv {
+  border: 3px solid black;
+}
+
 .barchart, .histogram {
   border: 3px solid black;
   margin: 20px;

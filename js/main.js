@@ -49,17 +49,23 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     heatMap = new HeatMap({ parentElement: '#heatTimeDiv'}, data, null);
     //heatMap.updateVis();
+
     callsByWeekDay = new Barchart({
       parentElement: '#callsByWeekDay',
       }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
     callsByWeekDay.updateVis();
+
+    callsByCategory = new Barchart({
+      parentElement: '#callsByCategory',
+      }, data, "category", "Calls By Category", "Category", "Number of Calls", 110);
+    callsByCategory.updateVis();
 
     requestReceivedUpdated = new Histogram({
       parentElement: '#requestReceivedUpdated',
     }, data, "days_between", "Days Between Call Received and Issue Updated", "Days Between Dates", "Number of Calls")
     requestReceivedUpdated.updateVis(10);
 
-    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap];
+    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory];
     filterData(); // initializes filteredData array (to show count on refresh)
   })
 .catch(error => {
@@ -67,7 +73,6 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 });
 
 function serviceNameCategories(d){
-  
   //cat1 - Accessibility
   cat1Keys = ["ada compliant, city of cinti", "curb ramp, new/enhance", "handrails, repair", "request an accomodation, coc",
   "signal, audible signal repair", "sidewalk, obstructions", "general accessibility"]
@@ -154,7 +159,6 @@ function serviceNameCategories(d){
   else{
     return "Other";
   }
-  
 }
 
 function agencyResponsibleOther(d){
@@ -171,7 +175,6 @@ function updateMapMarkerColor(val){
   leafletMap.colorCol = val;
   leafletMap.updateVis();
 }
-
 
 function updateMapBackground(val){
   if (val == "default"){
