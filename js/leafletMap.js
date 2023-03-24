@@ -85,19 +85,17 @@ class LeafletMap {
             }
           })
           .on('mousemove', (event) => {
-              //position the tooltip
               d3.select('#tooltip')
                 .style('left', (event.pageX + 10) + 'px')   
                 .style('top', (event.pageY + 10) + 'px');
             })              
-          .on('mouseleave', function() { //function to add mouseover event
+          .on('mouseleave', function() {
               d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
                 .duration('150') //how long we are transitioning between the two states (works like keyframes)
                 .attr("fill", d => vis.colorScale(vis.colorValue(d))) //change the fill
                 .attr('r', 3) //change radius
                 .attr("stroke", "none")
               
-                //create a tool tip
               d3.select('#tooltip')
               .style('display', "none")
             })
@@ -267,6 +265,41 @@ class LeafletMap {
           return ''
         }
       })
+      .on('mouseover', function(event,d) { //function to add mouseover event
+        if(d.filtered === false){
+          d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
+            .duration('150') //how long we are transitioning between the two states (works like keyframes)
+            .attr('r', 4) //change radius
+            .attr("stroke", "black");
+
+          //create a tool tip
+          d3.select('#tooltip')
+          .style('left', (event.pageX + 10) + 'px')   
+          .style('top', (event.pageY + 10) + 'px')
+          .style('display', 'block')
+            // Format number with million and thousand separator
+          .html(`<div class="tooltip-label">Requested Date: </div><div class="tooltip">${d.requested_date}</div></br>
+                <div class="tooltip-label">Updated Date: </div><div class="tooltip">${d.updated_date}</div></br>
+                <div class="tooltip-label">Public Agency: </div><div class="tooltip">${d.agency_responsible}</div></br>
+                <div class="tooltip-label">Service Details: </div><div class="tooltip">${d.service_name}</div></br>
+                <div class="tooltip-label">Service Description: </div><div class="tooltip">${d.description || "None"}</div></br>`);
+        }
+      })
+      .on('mousemove', (event) => {
+          d3.select('#tooltip')
+            .style('left', (event.pageX + 10) + 'px')   
+            .style('top', (event.pageY + 10) + 'px');
+        })              
+      .on('mouseleave', function() {
+          d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
+            .duration('150') //how long we are transitioning between the two states (works like keyframes)
+            .attr("fill", d => vis.colorScale(vis.colorValue(d))) //change the fill
+            .attr('r', 3) //change radius
+            .attr("stroke", "none")
+          
+          d3.select('#tooltip')
+          .style('display', "none")
+        });
     }
     
     updateBaseTile(newTile){
