@@ -84,7 +84,7 @@ class Histogram {
 
     updateVis(nBin){
         let vis = this;
-        //vis.data = vis.data.filter(d => d.sy_dist !== "BLANK" && d.filtered === false);
+        vis.data = vis.data.filter(d => d.filtered === false);
 
 		vis.xValue = d => d[vis.aggregateAttr];
         vis.yValue = d => d.count;

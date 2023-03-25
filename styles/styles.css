@@ -101,6 +101,14 @@ button {
 #heatTimeDiv {
   border: 3px solid black;
 }
+#heatTimeDiv rect:hover {
+  stroke: #000000;
+  stroke-width: 2px;
+}
+#heatTimeDiv .title {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
 
 .barchart, .histogram {
   border: 3px solid black;

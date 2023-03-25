@@ -65,7 +65,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     }, data, "days_between", "Days Between Call Received and Issue Updated", "Days Between Dates", "Number of Calls")
     requestReceivedUpdated.updateVis(10);
 
-    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory];
+    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, requestReceivedUpdated];
     filterData(); // initializes filteredData array (to show count on refresh)
   })
 .catch(error => {
@@ -222,8 +222,8 @@ function filterData(resetBrush = false) {
 	}
 	d3.select(".dataCount").text(filteredData.filter(d => !d.filtered).length + " / " + data.length)
 	filterableVisualizations.forEach(v => {
-		if(v.aggregateAttr === "???"){ // for histograms
-			v.updateVis(nBins);
+		if(v.aggregateAttr === "days_between"){ // for histograms
+			v.updateVis(10);
 		}else{
 			v.updateVis(resetBrush);
 		}
