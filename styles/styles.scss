@@ -59,6 +59,9 @@ button{
     circle:not(.filtered):hover{
       cursor: pointer;
     }
+    path{
+      fill: none;
+    }
   }
 }
 

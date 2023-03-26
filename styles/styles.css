@@ -61,6 +61,9 @@ button {
 .mapContainer #mapDiv circle:not(.filtered):hover {
   cursor: pointer;
 }
+.mapContainer #mapDiv path {
+  fill: none;
+}
 
 .footerBar {
   position: sticky;
