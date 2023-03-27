@@ -84,7 +84,7 @@ class Histogram {
 
     updateVis(nBin){
         let vis = this;
-        //vis.data = vis.data.filter(d => d.sy_dist !== "BLANK" && d.filtered === false);
+        vis.data = vis.data.filter(d => d.filtered === false);
 
 		vis.xValue = d => d[vis.aggregateAttr];
         vis.yValue = d => d.count;
@@ -102,7 +102,7 @@ class Histogram {
 		
 		let bins = histogram(vis.data);
 		
-		vis.yScale.domain([1e-1, d3.max(bins, d => d.length)]);
+		vis.yScale.domain([1e0, d3.max(bins, d => d.length)]);
 
 		let u = vis.chart.selectAll("rect")
 			.data(bins)
@@ -115,10 +115,19 @@ class Histogram {
 			.duration(1000)
 			.attr("x", 1)
 			.attr("transform", function(d) {
+                if(isNaN(vis.yScale(d.length))){
+                    return "translate(" + vis.xScale(d.x0) + "," + 0 + ")";
+                }
 				return "translate(" + vis.xScale(d.x0) + "," + vis.yScale(d.length) + ")";
 			})
 			.attr("width", function(d) { return vis.xScale(d.x1) - vis.xScale(d.x0); })
-			.attr("height", function(d) { return vis.height - vis.yScale(d.length) })
+			.attr("height", function(d) { 
+                let newHeight = vis.height - vis.yScale(d.length);
+                if(newHeight < 0 || isNaN(newHeight)){
+                    return 0;
+                }
+                return newHeight;
+            })
 			.style("fill", "#69b3a2")
 
 		// If less bars exist in the new histogram, delete bars no longer in use

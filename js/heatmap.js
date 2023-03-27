@@ -99,7 +99,6 @@ class HeatMap {
         .style("fill", function(d) { return vis.myColor(d.count)} )
       .on('mouseover', (event,d) => {
         d3.select('#tooltip')
-          .style('opacity', 1)
           .style('display', 'block')
           .html(`<div class="tooltip-label">Calender Date: </div><div class="tooltip">${d.callDate}</div></br>
                 <div class="tooltip-label">Calls Received: </div><div class="tooltip">${d.count}</div></br>`)
@@ -110,7 +109,7 @@ class HeatMap {
           .style('top', (event.pageY + vis.config.tooltipPadding) + 'px')
       })
       .on('mouseleave', () => {
-        d3.select('#tooltip').style('opacity', 0);
+        d3.select('#tooltip').style('display', "none");
       });
 
       vis.svg.append("text")
