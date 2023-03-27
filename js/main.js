@@ -29,6 +29,8 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
       d.latitude = +d.latitude; //latitude - convert to number
       d.longitude = +d.longitude; //longitude - convert to number
 
+      d.zipcode = d.zipcode == "" ? "Unknown" : +d.zipcode;
+
       // Derived properties
       d.days_between =  Math.trunc((new Date(d.updated_date).getTime() - new Date(d.requested_date).getTime()) / (1000 * 3600 * 24))
       d.category = this.serviceNameCategories(d);
@@ -56,6 +58,13 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
       }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
     callsByWeekDay.updateVis();
 
+    callsByZipcode = new Barchart({
+      parentElement: '#callsByZipcode',
+      containerWidth: 700,
+      containerHeight: 400
+      }, data, "zipcode", "Calls By Zipcode", "Zipcode", "Number of Calls", 30, false);
+    callsByZipcode.updateVis();
+    
     callsByCategory = new Barchart({
       parentElement: '#callsByCategory',
       }, data, "category", "Calls By Category", "Category", "Number of Calls", 110);
@@ -66,7 +75,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     }, data, "days_between", "Days Between Call Received and Issue Updated", "Days Between Dates", "Number of Calls")
     requestReceivedUpdated.updateVis(10);
 
-    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, requestReceivedUpdated];
+    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, callsByZipcode, requestReceivedUpdated];
     filterData(); // initializes filteredData array (to show count on refresh)
   })
 .catch(error => {
