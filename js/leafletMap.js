@@ -13,6 +13,7 @@ class LeafletMap {
     this.stUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
     this.data = _data;
     this.colorCol = _colorCol;
+    this.drawnFeatures = new L.FeatureGroup();
     this.initVis();
   }
   
@@ -35,7 +36,48 @@ class LeafletMap {
     vis.theMap = L.map('mapDiv', {
       center: [39.1, -84.5],
       zoom: 12,
-      layers: [vis.base_layer]
+      layers: [vis.base_layer],
+    });
+
+    vis.theMap.addLayer(vis.drawnFeatures);
+
+    let drawControl = new L.Control.Draw({
+        // position: "topright",
+        edit: {
+            featureGroup: vis.drawnFeatures,
+            remove: true
+        },
+        draw: {
+          polyline: false,
+          circle: false,
+          circlemarker: false,
+          marker: false,
+          polygon: {
+            shapeOptions: {
+              color: '#ff0000'
+            },
+          },
+          rect: {
+            shapeOptions: {
+              color: '#00ff00'
+            },
+          },
+		   },
+ 
+    });
+    vis.theMap.addControl(drawControl);
+
+    vis.theMap.on("draw:created", function(e){
+        vis.drawnFeatures.addLayer(e.layer);
+        vis.filterToPointsInPolygon(vis.drawnFeatures.getLayers());
+    });
+
+    vis.theMap.on("draw:edited", function(e){
+        vis.filterToPointsInPolygon(vis.drawnFeatures.getLayers());
+    });
+
+    vis.theMap.on("draw:deleted", function(e){
+      vis.filterToPointsInPolygon(vis.drawnFeatures.getLayers());
     });
 
     //default starting color
@@ -84,7 +126,6 @@ class LeafletMap {
             }
           })
           .on('mousemove', (event) => {
-              //position the tooltip
               d3.select('#tooltip')
                 .style('left', (event.pageX + 10) + 'px')   
                 .style('top', (event.pageY + 10) + 'px');
@@ -95,16 +136,16 @@ class LeafletMap {
                 .attr("fill", d => vis.colorScale(vis.colorValue(d))) //change the fill
                 .attr('r', 3) //change radius
                 .attr("stroke", "none")
-
-              d3.select('#tooltip').style('display', 'none');
-
-          })
+              
+              d3.select('#tooltip')
+              .style('display', "none")
+            })
           .on('click', (event, d) => { //experimental feature I was trying- click on point and then fly to it
-              // vis.newZoom = vis.theMap.getZoom()+2;
-              // if( vis.newZoom > 18)
-              //  vis.newZoom = 18; 
-              // vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
-          });
+              vis.newZoom = vis.theMap.getZoom()+2;
+              if( vis.newZoom > 16)
+                vis.newZoom = 16;
+              vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
+            });
     
     //handler here for updating the map, as you zoom in and out           
     vis.theMap.on("zoomend", function(){
@@ -241,21 +282,12 @@ class LeafletMap {
           .style("alignment-baseline", "middle")
           .style("font-weight", "bold")
     }
-
-    //want to see how zoomed in you are? 
-    // console.log(vis.map.getZoom()); //how zoomed am I
-
-    // if( vis.theMap.getZoom > 15 ){
-    //   metresPerPixel = 40075016.686 * Math.abs(Math.cos(map.getCenter().lat * Math.PI/180)) / Math.pow(2, map.getZoom()+8);
-    //   desiredMetersForPoint = 100; //or the uncertainty measure... =) 
-    //   radiusSize = desiredMetersForPoint / metresPerPixel;
-    // }
    
    //redraw based on new zoom and filter status - need to recalculate on-screen position
     vis.Dots
       .data(vis.data)
-      .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
-      .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
+      .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).x)
+      .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).y)
       .attr("fill", d => vis.colorScale(vis.colorValue(d)))
       .attr("r", 3)
       .attr('class', d => {
@@ -264,7 +296,7 @@ class LeafletMap {
         }else{
           return ''
         }
-      })
+      });
     }
     
     updateBaseTile(newTile){
@@ -286,4 +318,28 @@ class LeafletMap {
     let vis = this;
 
   }
+
+  filterToPointsInPolygon(polys) {
+    let allPolygons = [];
+    polys.map(poly => {
+      let geoPoly = poly.toGeoJSON();
+      allPolygons.push(turf.polygon([geoPoly.geometry.coordinates[0]]));
+    });
+    data.map(d => {
+      let numInside = allPolygons.length; // assume point is inside of all polys at first
+      // console.log("inside" + numInside + " to start")
+      allPolygons.map(parentPolygon => {
+        let point = turf.point([d.longitude, d.latitude]);
+        if (!turf.inside(point, parentPolygon)){
+          numInside -= 1; // remove 1 from count if the point is not within a specific poly
+        }
+      });
+      if(numInside > 0){ // in at least 1 polygon
+        d.insidePolygon = true;
+      }else{
+        d.insidePolygon = false;
+      }
+    })
+    filterData();
+  };
 }

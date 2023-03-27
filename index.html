@@ -40,6 +40,13 @@
             <svg id="callsByWeekDay"></svg>
         </div>
         <div>
+            <svg id="callsByZipcode"></svg>
+        </div>
+        <div>
+            <svg id="callsByCategory"></svg>
+        </div>
+        <div id="heatTimeDiv"></div>
+        <div>
             <svg id="requestReceivedUpdated"></svg>
         </div>
     </div>
@@ -53,11 +60,18 @@
     <!-- Libraries and Misc -->
     <script src="js/d3.v6.min.js"></script>
     <script src="js/leaflet.js"></script>
+    <!-- Leaflet.draw main plug in files -->
+    <link rel="stylesheet" href="node_modules\leaflet-draw\dist\leaflet.draw.css" />
+    <script src="node_modules\leaflet-draw\dist\leaflet.draw-src.js"></script>
+    <!-- turf  -->
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+
     <!-- JS files -->
     <script src="js/main.js"></script>
     <script src="js/barchart.js"></script>
     <script src="js/histogram.js"></script>
     <script src="js/leafletMap.js"></script>
+    <script src="js/heatmap.js"></script>
 
     <div id="tooltip"></div>
 

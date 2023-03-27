@@ -9,6 +9,8 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
   .then(_data =>{
     data = _data;
     console.log('Data loading complete. Work with dataset.');
+        
+    parseTime = d3.timeParse("%Y-%m-%d")
     //process the data
 
     parseTime = d3.timeParse("%Y-%m-%d")
@@ -27,12 +29,15 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
       d.latitude = +d.latitude; //latitude - convert to number
       d.longitude = +d.longitude; //longitude - convert to number
 
+      d.zipcode = d.zipcode == "" ? "Unknown" : +d.zipcode;
+
       // Derived properties
       d.days_between =  Math.trunc((new Date(d.updated_date).getTime() - new Date(d.requested_date).getTime()) / (1000 * 3600 * 24))
       d.category = this.serviceNameCategories(d);
       d.agency_with_other = this.agencyResponsibleOther(d);
       d.weekday_requested = d3.timeFormat("%a")(requested_parse);
       d.week_requested = d3.timeFormat("%U")(requested_parse);
+      d.insidePolygon = false;
       d.filtered = false;
       if(isNaN(d.latitude) || isNaN(d.longitude) || d.latitude == 0 || d.longitude == 0){
         d.unmapped = true;
@@ -48,17 +53,33 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     let unmappedCount = data.filter(d => d.unmapped === true).length
     d3.select("#unmappedCall").text("# of Calls Not Displayed: "+ unmappedCount)
 
+    // leafletMap.updateVis();
+
+    heatMap = new HeatMap({ parentElement: '#heatTimeDiv'}, data, null);
+    //heatMap.updateVis();
 
     callsByWeekDay = new Barchart({
       parentElement: '#callsByWeekDay',
       }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
+
+    callsByZipcode = new Barchart({
+      parentElement: '#callsByZipcode',
+      containerWidth: 700,
+      containerHeight: 400
+      }, data, "zipcode", "Calls By Zipcode", "Zipcode", "Number of Calls", 30, false);
+    callsByZipcode.updateVis();
+    
+    callsByCategory = new Barchart({
+      parentElement: '#callsByCategory',
+      }, data, "category", "Calls By Category", "Category", "Number of Calls", 110);
+    callsByCategory.updateVis();
 
     requestReceivedUpdated = new Histogram({
       parentElement: '#requestReceivedUpdated',
     }, data, "days_between", "Days Between Call Received and Issue Updated", "Days Between Dates", "Number of Calls")
     requestReceivedUpdated.updateVis(10);
 
-    filterableVisualizations = [leafletMap, callsByWeekDay];
+    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, callsByZipcode, requestReceivedUpdated];
     filterData(); // initializes filteredData array (to show count on refresh)
   })
 .catch(error => {
@@ -66,7 +87,6 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 });
 
 function serviceNameCategories(d){
-  
   //cat1 - Accessibility
   cat1Keys = ["ada compliant, city of cinti", "curb ramp, new/enhance", "handrails, repair", "request an accomodation, coc",
   "signal, audible signal repair", "sidewalk, obstructions", "general accessibility"]
@@ -153,7 +173,6 @@ function serviceNameCategories(d){
   else{
     return "Other";
   }
-  
 }
 
 function agencyResponsibleOther(d){
@@ -170,7 +189,6 @@ function updateMapMarkerColor(val){
   leafletMap.colorCol = val;
   leafletMap.updateVis();
 }
-
 
 function updateMapBackground(val){
   if (val == "default"){
@@ -190,15 +208,18 @@ function updateMapBackground(val){
   }
 }
 
-function filterData(resetBrush = false) {
+function filterData(resetBrush = false, fullReset = false) {
 	let filteredData = data;
-	if (globalDataFilter.length == 0) {
+	if (fullReset) {
 		filterableVisualizations.forEach(v => {
 			v.data = data;
 		})
 	} else {
 		filterableVisualizations.forEach(v => {
 			filteredData = data.map(d => {
+        if(d.insidePolygon === false && leafletMap.drawnFeatures.getLayers().length > 0){
+          return {...d, filtered: true};
+        }
 				for (i in globalDataFilter){
 					let attrFilter = globalDataFilter[i]
 					if(attrFilter[0] === "requested_date"){
@@ -211,15 +232,15 @@ function filterData(resetBrush = false) {
 						}
 					}
 				}
-				return {...d, filtered: false}
+				return {...d, filtered: false};
 			})
 			v.data = filteredData;
 		})
 	}
 	d3.select(".dataCount").text(filteredData.filter(d => !d.filtered).length + " / " + data.length)
 	filterableVisualizations.forEach(v => {
-		if(v.aggregateAttr === "???"){ // for histograms
-			v.updateVis(nBins);
+		if(v.aggregateAttr === "days_between"){ // for histograms
+			v.updateVis(10);
 		}else{
 			v.updateVis(resetBrush);
 		}
@@ -227,6 +248,7 @@ function filterData(resetBrush = false) {
 }
 
 function clearFilters(){
+  leafletMap.drawnFeatures.clearLayers()
 	globalDataFilter = [];
-	filterData(resetBrush=true);
+	filterData(resetBrush=true, fullReset=true);
 }

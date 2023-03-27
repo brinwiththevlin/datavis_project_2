@@ -1,0 +1,50 @@
+body {
+    padding: 30px;
+    background: #FFC0CB;
+  }
+  h1 {
+    font-family: 'Lora', serif;
+    font-size: 1.4rem;
+  }
+  .btn {
+    font-size: 11px;
+    color: #adadad;
+  }
+  #tooltip {
+    position: absolute;
+    opacity: 0;
+    background: #fff;
+    box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
+    border: 1px solid #ddd;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+  }
+  .tooltip-label {
+    font-weight: bold;
+    font-size: 12px;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    display:inline;
+  }
+  .tooltip {
+    font-weight: normal;
+    font-size: 12px;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    display:inline;
+  }
+.table {
+  width: max-content;
+}
+
+#mapDiv {
+  width: 500px;
+  height: 500px;
+}
+
+rect:hover { 
+  stroke: black;
+  stroke-width: 1px;
+  /* TODO update with better, this will outline all rect in vis */
+}
