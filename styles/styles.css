@@ -101,13 +101,6 @@ button {
   color: white;
 }
 
-.timeline {
-  border: 3px solid black;
-} 
-
-/* #heatTimeDiv {
-  border: 3px solid black;
-} */
 #heatTimeDiv rect:hover {
   stroke: #000000;
   stroke-width: 2px;
@@ -146,18 +139,21 @@ button {
   stroke-width: 4px;
 }
 
-/* .lineChartHolder {
+.timeline {
   border: 3px solid black;
   margin: 20px;
+}
+
+.lineChartHolder {
   flex-basis: auto;
 }
 .lineChartHolder #linechart .chart-line {
   fill: none;
-  stroke: rgb(105, 179, 162);
+  stroke: violet;
   stroke-width: 3px;
   -webkit-clip-path: url(#clip);
           clip-path: url(#clip);
-} */
+}
 
 /* TOOLTIPS */
 #tooltip {
