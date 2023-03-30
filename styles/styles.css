@@ -142,6 +142,19 @@ button {
   stroke-width: 4px;
 }
 
+.lineChartHolder {
+  border: 3px solid black;
+  margin: 20px;
+  flex-basis: auto;
+}
+.lineChartHolder #linechart .chart-line {
+  fill: none;
+  stroke: rgb(105, 179, 162);
+  stroke-width: 3px;
+  -webkit-clip-path: url(#clip);
+          clip-path: url(#clip);
+}
+
 /* TOOLTIPS */
 #tooltip {
   position: absolute;
