@@ -48,6 +48,11 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     //Plot map
     leafletMap = new LeafletMap({ parentElement: '#mapDiv'}, data, "color_callType");
+
+    //update unmapped data count
+    let unmappedCount = data.filter(d => d.unmapped === true).length
+    d3.select("#unmappedCall").text("# of Calls Not Displayed: "+ unmappedCount)
+
     // leafletMap.updateVis();
 
     heatMap = new HeatMap({ parentElement: '#heatTimeDiv'}, data, null);
@@ -56,7 +61,6 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     callsByWeekDay = new Barchart({
       parentElement: '#callsByWeekDay',
       }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
-    callsByWeekDay.updateVis();
 
     callsByZipcode = new Barchart({
       parentElement: '#callsByZipcode',
