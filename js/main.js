@@ -53,24 +53,24 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     linechart = new LineChart({ parentElement: '#linechart'},
 		data, "requested_date", "Calls over Time", "Date Requested", "# of Calls");
-    linechart.updateVis();
+    //linechart.updateVis();
 
     callsByWeekDay = new Barchart({
       parentElement: '#callsByWeekDay',
       }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
-    callsByWeekDay.updateVis();
+    //callsByWeekDay.updateVis();
 
     callsByZipcode = new Barchart({
       parentElement: '#callsByZipcode',
       containerWidth: 700,
       containerHeight: 400
       }, data, "zipcode", "Calls By Zipcode", "Zipcode", "Number of Calls", 30, false);
-    callsByZipcode.updateVis();
+    //callsByZipcode.updateVis();
     
     callsByCategory = new Barchart({
       parentElement: '#callsByCategory',
       }, data, "category", "Calls By Category", "Category", "Number of Calls", 110);
-    callsByCategory.updateVis();
+    //callsByCategory.updateVis();
 
     requestReceivedUpdated = new Histogram({
       parentElement: '#requestReceivedUpdated',

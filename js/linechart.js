@@ -8,9 +8,9 @@ class LineChart {
         this.config = {
             parentElement: _config.parentElement,
             contextHeight: 30,
-            margin: {top: 30, right: 10, bottom: 180, left: 75},
+            margin: {top: 50, right: 10, bottom: 180, left: 80},
             contextMargin: {top: 283, right: 10, bottom: 30, left: 45},
-            width:  545,
+            width:  670,
             height: 170,
             title: _title,
             xLabel: _xLabel,
@@ -55,7 +55,7 @@ class LineChart {
         // Title
         vis.svg.append("text")
             .attr("x", vis.config.width / 2 + vis.config.margin.left)
-            .attr("y", 25)
+            .attr("y", 40 + vis.config.contextHeight + vis.config.margin.top)
             .attr("text-anchor", "middle")
             .style("font-size", "24px")
             .text(vis.config.title);
@@ -63,20 +63,21 @@ class LineChart {
         // Y-Axis Label
         vis.svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("x", -(vis.config.height / 2 + vis.config.margin.top))
+            .attr("x", -(vis.config.height / 2 + vis.config.margin.top + vis.config.contextHeight + vis.config.contextMargin.bottom))
             .attr("y", 30)
             .style("text-anchor", "middle")
             .text(vis.config.yLabel);
 
         // X-Axis Label
         vis.svg.append("text")
-            .attr("transform", "translate(" + (vis.config.width / 2 + vis.config.margin.left) + " ," + (vis.config.height + 95) + ")")
+            .attr("transform", "translate(" + (vis.config.width / 2 + vis.config.margin.left) + ", " + (vis.config.height + 115 + vis.config.contextHeight + vis.config.contextMargin.bottom) + ")")
             .style("text-anchor", "middle")
             .text(vis.config.xLabel);
 
         // Append focus group with x- and y-axes
         vis.focus = vis.svg.append('g')
-            .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
+            .attr('transform', "translate(" + vis.config.margin.left + ", " + (vis.config.margin.top + vis.config.contextHeight + vis.config.contextMargin.bottom + 20) + ")")
+            //`translate(${vis.config.margin.left},(${vis.config.margin.top}+))`);
 
         // This region clips the path
         vis.focus.append('defs').append('clipPath')
@@ -113,7 +114,7 @@ class LineChart {
 
         // Append context group with x- and y-axes
         vis.context = vis.svg.append('g')
-            .attr('transform', `translate(${vis.config.contextMargin.left},${vis.config.contextMargin.top})`);
+            .attr('transform', `translate(${vis.config.contextMargin.left},0)`);
 
         vis.contextAreaPath = vis.context.append('path')
             .attr('class', 'chart-area')
@@ -176,14 +177,14 @@ class LineChart {
         vis.yValue = d => d.count;
 
         // Initialize line and area generators
-        vis.line = d3.line()
-            .x(d => vis.xScaleFocus(vis.xValue(d)))
-            .y(d => vis.yScaleFocus(vis.yValue(d)));
-
         vis.area = d3.area()
             .x(d => vis.xScaleContext(vis.xValue(d)))
             .y1(d => vis.yScaleContext(vis.yValue(d)))
             .y0(vis.config.contextHeight);
+        
+        vis.line = d3.line()
+            .x(d => vis.xScaleFocus(vis.xValue(d)))
+            .y(d => vis.yScaleFocus(vis.yValue(d)));
 
         // Set the scale input domains
         vis.xScaleFocus.domain(d3.extent(vis.aggregatedData, vis.xValue));
@@ -208,11 +209,13 @@ class LineChart {
   
       vis.focusLinePath
           .datum(vis.aggregatedData)
-          .attr('d', vis.line);
+          .attr('d', vis.line)
+          .attr('fill', "violet");
   
       vis.contextAreaPath
           .datum(vis.aggregatedData)
-          .attr('d', vis.area);
+          .attr('d', vis.area)
+          .attr('fill', "#f1dbea");
   
       vis.tooltipTrackingArea
           .on('mouseenter', () => {
