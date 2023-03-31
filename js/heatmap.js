@@ -10,7 +10,7 @@ class HeatMap {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 800,
       containerHeight: _config.containerHeight || 400,
-      margin: _config.margin || {top: 30, right: 30, bottom: 100, left: 80},
+      margin: _config.margin || {top: 50, right: 30, bottom: 100, left: 80},
       tooltipPadding: _config.tooltipPadding || 15
     }
     
