@@ -6,6 +6,11 @@ body {
   font-family: "Varela Round", sans-serif;
 }
 
+.data-info {
+  padding: 18px;
+  width: 1470px;
+}
+
 .rounded {
   border-radius: 15px !important;
   margin: 20px;
@@ -66,7 +71,7 @@ button {
   width: 200px;
 }
 .mapContainer #mapDiv {
-  width: 400px;
+  width: 500px;
   height: 400px;
   align-self: center;
 }
@@ -166,6 +171,10 @@ button {
   cursor: pointer;
 }
 
+.tick {
+  font-size: 12px;
+}
+
 .bar {
   shape-rendering: crispEdges;
 }
@@ -244,7 +253,7 @@ button {
 .map-info-tool {
   width: 20px;
   height: 20px;
-  margin: 2px 6px 0 224px;
+  margin: 15px 20px 0 224px;
 }
 
 /* END TOOLTIPS *//*# sourceMappingURL=styles.css.map */

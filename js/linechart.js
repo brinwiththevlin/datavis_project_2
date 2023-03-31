@@ -43,8 +43,12 @@ class LineChart {
             .nice();
 
         // Initialize axes
-        vis.xAxisFocus = d3.axisBottom(vis.xScaleFocus).tickSizeOuter(0);
-        vis.xAxisContext = d3.axisBottom(vis.xScaleContext).tickSizeOuter(0);
+        vis.xAxisFocus = d3.axisBottom(vis.xScaleFocus)
+            .tickSizeOuter(0)
+            .tickFormat(d3.timeFormat("%b"));
+        vis.xAxisContext = d3.axisBottom(vis.xScaleContext)
+            .tickSizeOuter(0)
+            .tickFormat(d3.timeFormat("%b"));
         vis.yAxisFocus = d3.axisLeft(vis.yScaleFocus);
 
         // Define size of SVG drawing area

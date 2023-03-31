@@ -8,7 +8,7 @@ class Histogram {
 			parentElement: _config.parentElement,
 			containerWidth: _config.containerWidth || 500,
 			containerHeight: _config.containerHeight || 300,
-			margin: _config.margin || {top: 35, right: 10, bottom: 30, left: 70},
+			margin: _config.margin || {top: 45, right: 10, bottom: 30, left: 80},
 			title: _title,
 			xLabel: _xLabel,
 			yLabel: _yLabel,
@@ -158,8 +158,7 @@ class Histogram {
 
 		vis.xAxisG.call(vis.xAxis)
             .selectAll("text")
-            .attr("transform", "translate(-10,0)rotate(-55)")
-            .style("text-anchor", "end");
+            .style("text-anchor", "middle");
         vis.yAxisG.call(vis.yAxis);
 	
 		this.chart.selectAll("rect").on('mouseover', (event, d) => {
