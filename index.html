@@ -14,26 +14,35 @@
     </div>
     <div class="flex-container">
         <div class="mapContainer flex-container">
-            <h2>Cincinnati 311 Calls</h2>
-            <!-- Dropdown for color option of map -->
-            <label for="mapMarkerColor">Choose a marker color scheme:</label>
-            <select name="mapMarkerColor" id="mapMarkerColor" onchange="updateMapMarkerColor(this.value)">
-                <option value="color_callType">Color by CALL TYPE</option>
-                <option value="color_timeBetween">Color by TIME BETWEEN REQUESTED DATE AND UPDATED DATE</option>
-                <option value="color_daysInYear">Color by DAYS IN THE YEAR</option>
-                <option value="color_publicAgency">Color by PUBLIC AGENCY</option>
-            </select>
-            <!-- Dropdown for background of map -->
-            <label for="mapBackgroundToggleLabel">Choose a map background:</label>
-            <select name="mapBGToggle" id="mapBGToggle" onchange="updateMapBackground(this.value)">
-                <option value="default">Default</option>
-                <option value="color">Color</option>
-                <option value="streets">Streets</option>
-                <option value="dark">Dark</option>
-                <option value="gray">Gray</option>
-            </select>
-            <div id="mapLegend"></div>
-            <div id="mapDiv"></div>
+            <div class="mapHeader">
+                <div class="mapTitle">Cincinnati 311 Calls</div>
+                <img src="styles/info-logo.png" class="map-info-tool">
+            </div>
+            <div class="mapInnerContainer">
+                <div class="mapFilterLegend">
+                    <div class="mapFilter">
+                        <!-- Dropdown for color option of map -->
+                        <label for="mapMarkerColor">Choose a marker color scheme:</label>
+                        <select name="mapMarkerColor" id="mapMarkerColor" onchange="updateMapMarkerColor(this.value)">
+                            <option value="color_callType">Color by CALL TYPE</option>
+                            <option value="color_timeBetween">Color by TIME BETWEEN REQUESTED DATE AND UPDATED DATE</option>
+                            <option value="color_daysInYear">Color by DAYS IN THE YEAR</option>
+                            <option value="color_publicAgency">Color by PUBLIC AGENCY</option>
+                        </select>
+                        <!-- Dropdown for background of map -->
+                        <label for="mapBackgroundToggleLabel">Choose a map background:</label>
+                        <select name="mapBGToggle" id="mapBGToggle" onchange="updateMapBackground(this.value)">
+                            <option value="default">Default</option>
+                            <option value="color">Color</option>
+                            <option value="streets">Streets</option>
+                            <option value="dark">Dark</option>
+                            <option value="gray">Gray</option>
+                        </select>
+                    </div>
+                    <div id="mapLegend"></div>
+                </div>
+                <div id="mapDiv"></div>
+            </div>
         </div>
         <div>
             <svg id="callsByWeekDay"></svg>
@@ -44,7 +53,9 @@
         <div>
             <svg id="callsByCategory"></svg>
         </div>
-        <div id="heatTimeDiv"></div>
+        <div>
+            <svg id="heatTimeDiv"></svg>
+        </div>
         <div>
             <svg id="requestReceivedUpdated"></svg>
         </div>
@@ -73,6 +84,7 @@
     <script src="js/heatmap.js"></script>
 
     <div id="tooltip"></div>
+    <div id="info-tooltip"></div>
 
 </body>
 </html>

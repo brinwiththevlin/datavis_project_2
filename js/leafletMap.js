@@ -163,8 +163,8 @@ class LeafletMap {
     //Create legend
     vis.legendSvg = d3.select("#mapLegend")
       .append("svg")
-      .attr("width", 300)
-      .attr("height", 200);
+      .attr("width", 280)
+      .attr("height", 250);
 
     // Add legend title for coloring
     vis.legendSvg.append('text')
@@ -189,7 +189,7 @@ class LeafletMap {
         .enter()
       .append("circle")
         .attr("cx", 10)
-        .attr("cy", function(d,i){ return 25 + i*12}) // 25 is where the first dot appears. 10 is the distance between dots
+        .attr("cy", function(d,i){ return 35 + i*20}) // 25 is where the first dot appears. 10 is the distance between dots
         .attr("r", 5)
         .style("fill", d => vis.colorScale(d))
       
@@ -198,11 +198,10 @@ class LeafletMap {
           .enter()
         .append("text")
           .attr("x", 30)
-          .attr("y", function(d,i){ return 25 + i*12}) // 25 is where the first dot appears. 10 is the distance between dots
+          .attr("y", function(d,i){ return 35 + i*20}) // 25 is where the first dot appears. 10 is the distance between dots
           .text(d => d)
           .attr("text-anchor", "left")
           .style("alignment-baseline", "middle")
-          .style("font-weight", "bold")
     }
     else if (vis.colorCol == "color_timeBetween"){
       vis.colorValue = d => d.days_between;
@@ -217,7 +216,7 @@ class LeafletMap {
         .data(vis.legendCat)
         .enter()
       .append("rect")
-        .attr("x", function(d,i){ return 25 + i*10})
+        .attr("x", function(d,i){ return 35 + i*10})
         .attr("y", 25)
         .attr("width", 10)
         .attr("height", 20)
@@ -243,7 +242,7 @@ class LeafletMap {
         .data(vis.legendCat)
         .enter()
       .append("rect")
-        .attr("x", function(d,i){ return 25 + i*10})
+        .attr("x", function(d,i){ return 35 + i*10})
         .attr("y", 25)
         .attr("width", 10)
         .attr("height", 20)
@@ -268,7 +267,7 @@ class LeafletMap {
         .enter()
       .append("circle")
         .attr("cx", 10)
-        .attr("cy", function(d,i){ return 25 + i*12}) // 25 is where the first dot appears. 10 is the distance between dots
+        .attr("cy", function(d,i){ return 35 + i*20}) // 25 is where the first dot appears. 10 is the distance between dots
         .attr("r", 5)
         .style("fill", d => vis.colorScale(d))
       
@@ -277,11 +276,10 @@ class LeafletMap {
           .enter()
         .append("text")
           .attr("x", 30)
-          .attr("y", function(d,i){ return 25 + i*12}) // 25 is where the first dot appears. 10 is the distance between dots
+          .attr("y", function(d,i){ return 35 + i*20}) // 25 is where the first dot appears. 10 is the distance between dots
           .text(d => d)
           .attr("text-anchor", "left")
           .style("alignment-baseline", "middle")
-          .style("font-weight", "bold")
     }
    
    //redraw based on new zoom and filter status - need to recalculate on-screen position

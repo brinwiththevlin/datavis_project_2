@@ -5,13 +5,14 @@ class HeatMap {
    * @param {Object}
    * @param {Array}
    */
-  constructor(_config, _data, _colorVar) {
+  constructor(_config, _data, _colorVar, _infoText = "") {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 800,
       containerHeight: _config.containerHeight || 450,
-      margin: _config.margin || {top: 30, right: 30, bottom: 150, left: 80},
-      tooltipPadding: _config.tooltipPadding || 15
+      margin: _config.margin || {top: 50, right: 30, bottom: 150, left: 80},
+      tooltipPadding: _config.tooltipPadding || 15,
+      infoText: _infoText
     }
     
     // set the dimensions and margins of the graph
@@ -40,23 +41,67 @@ class HeatMap {
         .tickSizeOuter(0)
 
     vis.svg = d3.select(vis.config.parentElement)
-    .append("svg")
-      .attr("width", vis.width + vis.config.margin.left + vis.config.margin.right)
-      .attr("height", vis.height + vis.config.margin.top + vis.config.margin.bottom)
-    .append("g")
-      .attr("transform",
-            `translate(${vis.config.margin.left},${vis.config.margin.top})`);
+      .attr("width", vis.config.containerWidth)
+      .attr("height", vis.config.containerHeight)
     
     vis.chart = vis.svg.append('g')
       .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
     
-      vis.xAxisG = vis.chart.append('g')
+    vis.xAxisG = vis.chart.append('g')
     .attr('class', 'axis x-axis')
     .attr('transform', `translate(0,${vis.height})`);
 
     // Append y-axis group 
     vis.yAxisG = vis.chart.append('g')
         .attr('class', 'axis y-axis');
+
+    // Info Logo
+    vis.svg
+    .append("svg:image")
+    .attr("xlink:href", "../styles/info-logo.png")
+    .attr('class', 'info-logo')
+    .attr("transform", "translate(" + (vis.config.containerWidth - 25) + " ," + (7) + ")")
+    .on('click', (event, d) => {
+        if (!d3.select('#info-tooltip').classed("selected") ){
+            d3.select('#info-tooltip').classed("selected", true)
+            .style('display', 'block')
+            .style('left', (event.pageX + 5) + 'px')   
+            .style('top', (event.pageY) + 'px')
+            .html(`
+                <div class="tooltip-description">${vis.config.infoText}</div>
+                
+            `);
+            }else{
+            d3.select('#info-tooltip').classed("selected", false);
+            d3.select('#info-tooltip').style('display', 'none');
+            }
+        
+    })
+
+    vis.svg.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "middle")
+        .attr("transform", "translate(" + (vis.config.containerWidth / 2) + " ," + (vis.config.containerHeight - 5) + ")")
+        .text("Start of the Week (2022)");
+
+      vis.svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "middle")
+        .attr("y", 20)
+        .attr("x",- (vis.config.containerHeight / 2))
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("Week Day");
+
+      vis.svg.append("text")
+        .attr("class", "title")
+        .attr("text-anchor", "middle")
+        .attr("x", vis.config.containerWidth / 2)
+        .attr("y", 25)
+        .style("font-size", "20px")
+        .style("font-weight", "700")
+        .text("Density of Calls Per Day");
+    
 
     vis.updateVis();
   }
@@ -89,7 +134,7 @@ class HeatMap {
 
   renderVis(){
     let vis = this;
-      vis.heatmap = vis.svg.selectAll('.heatmap')
+        vis.heatmap = vis.chart.selectAll('.heatmap')
         .data(vis.data.filter(d => !d.filtered))
       .join("rect")
         .attr("x", function(d) { return vis.xScale(d.weeknum) })
@@ -112,30 +157,6 @@ class HeatMap {
         d3.select('#tooltip').style('display', "none");
       });
 
-      vis.svg.append("text")
-        .attr("class", "x label")
-        .attr("text-anchor", "middle")
-        .attr("x", vis.width/2)
-        .attr("y", vis.height+60)
-        .text("Start of the Week (2022)");
-
-      vis.svg.append("text")
-        .attr("class", "y label")
-        .attr("text-anchor", "middle")
-        .attr("y", -60)
-        .attr("x", -vis.height/2)
-        .attr("dy", ".75em")
-        .attr("transform", "rotate(-90)")
-        .text("Week Day");
-
-      vis.svg.append("text")
-        .attr("class", "title")
-        .attr("text-anchor", "middle")
-        .attr("y", -5)
-        .attr("x", vis.width/2)
-        // .attr("dy", ".75em")
-        // .attr("transform", "rotate(-90)")
-        .text("Density of Calls Per Day");
       //custom x-axis labels
       let weekIndex = vis.xScale.domain().filter(d => d%5==0)
       let days = vis.data.filter(d => weekIndex.includes(d.weeknum) && d.weekday == "Sun" || d.weeknum == 0)
@@ -143,8 +164,8 @@ class HeatMap {
       days.forEach((d, i)=>{
         vis.svg.append('text')
           .attr('class', 'label')
-          .attr('y', 64*i)
-          .attr('x', -275)
+          .attr('y', 64*i + 80)
+          .attr('x', -320)
           .attr('dy', '.71em')
           .attr("transform", "rotate(-90)")
           .style('text-anchor', 'end')
@@ -155,12 +176,13 @@ class HeatMap {
       vis.myGroups.forEach((d, i)=>{
         vis.svg.append('text')
           .attr('class', 'label')
-          .attr('y', 250 - 40*i)
-          .attr('x', -5)
+          .attr('y', 275 - 35*i)
+          .attr('x', 65)
           .attr('dy', '.71em')
           .style('text-anchor', 'end')
           .text(d);
       })
+
     }
 
     fillNullDays(data){
