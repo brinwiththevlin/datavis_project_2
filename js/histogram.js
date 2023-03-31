@@ -135,8 +135,7 @@ class Histogram {
 
 		vis.xAxisG.call(vis.xAxis)
             .selectAll("text")
-            .attr("transform", "translate(-10,0)rotate(-55)")
-            .style("text-anchor", "end");
+            .style("text-anchor", "middle");
         vis.yAxisG.call(vis.yAxis);
 	
 		this.chart.selectAll("rect").on('mouseover', (event, d) => {
