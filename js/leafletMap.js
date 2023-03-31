@@ -205,10 +205,10 @@ class LeafletMap {
     else if (vis.colorCol == "color_timeBetween"){
       vis.colorValue = d => d.days_between;
       vis.colorScale = d3.scaleLinear()
-        .range(["white", "#023020"])
+        .range(["#c1e7ff", "#004c6d"])
         .domain(d3.extent(vis.data, vis.colorValue))
       vis.legendCat = Array.from({length: 20}, (x, i) => i);
-      vis.legendScale = d3.scaleLinear().range(["white", "#023020"]).domain([0,20]);
+      vis.legendScale = d3.scaleLinear().range(["#c1e7ff", "#004c6d"]).domain([0,20]);
 
       // Add one dot in the legend for each star
       vis.legendSvg.selectAll("legendBar")
@@ -231,10 +231,10 @@ class LeafletMap {
     else if (vis.colorCol == "color_daysInYear"){
       vis.colorValue = d => new Date(d.requested_date);
       vis.colorScale = d3.scaleLinear()
-        .range(["white", "#023020"])
+        .range(["#c1e7ff", "#004c6d"])
         .domain(d3.extent(vis.data, vis.colorValue))
       vis.legendCat = Array.from({length: 20}, (x, i) => i);
-      vis.legendScale = d3.scaleLinear().range(["white", "#023020"]).domain([0,20])
+      vis.legendScale = d3.scaleLinear().range(["#c1e7ff", "#004c6d"]).domain([0,20])
 
       // Add one dot in the legend for each star
       vis.legendSvg.selectAll("legendBar")

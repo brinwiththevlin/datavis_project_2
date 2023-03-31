@@ -6,7 +6,7 @@ class Histogram {
     constructor(_config, _data, _aggregateAttr, _title, _xLabel, _yLabel, _XAxisLabelHeight = 20, _infoText = "") {
 		this.config = {
 			parentElement: _config.parentElement,
-			containerWidth: _config.containerWidth || 500,
+			containerWidth: _config.containerWidth || 400,
 			containerHeight: _config.containerHeight || 400,
 			margin: _config.margin || {top: 45, right: 10, bottom: 30, left: 80},
 			title: _title,
@@ -126,7 +126,7 @@ class Histogram {
 		
 		let bins = histogram(vis.data);
 		
-		vis.yScale.domain([1e0, d3.max(bins, d => d.length)]);
+		vis.yScale.domain([0, d3.max(bins, d => d.length)]);
 
 		let u = vis.chart.selectAll("rect")
 			.data(bins)
@@ -152,7 +152,6 @@ class Histogram {
                 }
                 return newHeight;
             })
-			.style("fill", "#69b3a2")
 
 		// If less bars exist in the new histogram, delete bars no longer in use
 		u.exit().remove()
