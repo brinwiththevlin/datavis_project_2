@@ -14,10 +14,29 @@ class WordCloud{
     }
 
     // this.data = _data;
-    this.data = [{word: "Running", size: "10"}, {word: "Surfing", size: "20"}, {word: "Climbing", size: "50"}, {word: "Kiting", size: "30"}, {word: "Sailing", size: "20"}, {word: "Snowboarding", size: "60"} ]
+    let vis = this;
+    vis.freqMap = {}
+    vis.stop_words = [];
+    d3.csv('/data/stop_words.csv', word => vis.stop_words.push(word.words))
+    _data.forEach(d => {
+      if (d.description != "Request entered through the Web. Refer to Intake Questions for further description.") {
+        var words = d.description.replace(/[^a-z\s]/igm,"").toLowerCase().split(/\s/gm).filter(string => string);
+        words.forEach(w => {
+          if (!vis.freqMap[w] && !vis.stop_words.includes(w.replace(/\s/ig))) {
+            vis.freqMap[w] = 1;
+          }
+          else if (!vis.stop_words.includes(w)){
+            vis.freqMap[w] += 1;
+          }
 
+        })
+      }
+    })
+    vis.data =Object.entries(vis.freqMap).map((e) => ( { word:e[0], size:e[1] } ))
+    vis.data.sort((a,b) => b.size - a.size)
+    vis.data = vis.data.slice(0, 50)
     //TODO: get word frequency out of the data
-    this.initVis();
+    vis.initVis();
 
   }
 
@@ -26,6 +45,8 @@ class WordCloud{
     vis.width = vis.config.containerWidth + vis.config.margin.left + vis.config.margin.right;
     vis.height = vis.config.containerHeight + vis.config.margin.top + vis.config.margin.bottom;
 
+    vis.sizeScale = d3.scaleLinear()
+      .range([20, 52])     
     // append the svg object to the body of the page
     vis.svg = d3.select(vis.config.parentElement)
       .append("svg")
@@ -35,17 +56,20 @@ class WordCloud{
         .attr("transform",
               "translate(" + vis.config.margin.left + "," + vis.config.margin.top + ")");
   
-    this.updateVis();
+    vis.updateVis();
   }
 
   updateVis(){
     let vis = this;
 
+    vis.sizeValue = d => d.size;
+    vis.sizeScale.domain(d3.extent(vis.data, vis.sizeValue))
+
     // Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
     // Wordcloud features that are different from one word to the other must be here
     vis.layout = d3.layout.cloud()
       .size([vis.width, vis.height])
-      .words(vis.data.map(function(d) { return {text: d.word, size:d.size}; }))
+      .words(vis.data.map(function(d) { return {text: d.word, size:vis.sizeScale(vis.sizeValue(d))}; }))
       .padding(5)        //space between words
       .rotate(function() { return ~~(Math.random() * 2) * 90; })
       .fontSize(function(d) { return d.size; })      // font size of words
