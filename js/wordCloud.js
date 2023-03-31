@@ -18,26 +18,27 @@ class WordCloud{
     vis.freqMap = {}
     vis.stop_words = [];
     d3.csv('/data/stop_words.csv', word => vis.stop_words.push(word.words))
-    _data.forEach(d => {
-      if (d.description != "Request entered through the Web. Refer to Intake Questions for further description.") {
-        var words = d.description.replace(/[^a-z\s]/igm,"").toLowerCase().split(/\s/gm).filter(string => string);
-        words.forEach(w => {
-          if (!vis.freqMap[w] && !vis.stop_words.includes(w.replace(/\s/ig))) {
-            vis.freqMap[w] = 1;
-          }
-          else if (!vis.stop_words.includes(w)){
-            vis.freqMap[w] += 1;
-          }
+    .then(stopwords => {
+      _data.forEach(d => {
+        if (d.description != "Request entered through the Web. Refer to Intake Questions for further description.") {
+          var words = d.description.replace(/[^a-z\s]/igm,"").toLowerCase().split(/\s/gm).filter(string => string);
+          words.forEach(w => {
+            if (!vis.freqMap[w] && !vis.stop_words.includes(w.replace(/\s/ig, ""))) {
+              vis.freqMap[w] = 1;
+            }
+            else if (!vis.stop_words.includes(w)){
+              vis.freqMap[w] += 1;
+            }
 
-        })
-      }
-    })
-    vis.data =Object.entries(vis.freqMap).map((e) => ( { word:e[0], size:e[1] } ))
-    vis.data.sort((a,b) => b.size - a.size)
-    vis.data = vis.data.slice(0, 50)
-    //TODO: get word frequency out of the data
-    vis.initVis();
-
+          })
+        }
+      })
+      vis.data = Object.entries(vis.freqMap).map((e) => ( { word:e[0], size:e[1] } ))
+      vis.data.sort((a,b) => b.size - a.size)
+      vis.data = vis.data.slice(0, 50)
+      //TODO: get word frequency out of the data
+      vis.initVis()
+  })
   }
 
   initVis(){
