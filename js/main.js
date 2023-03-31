@@ -47,9 +47,9 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     // Texts for info tool
     zipcodeText = "This barchart shows the top 9 zipcodes that received the highest number of calls in the area"
     issueResText = "This histogram shows the days between when calls are made to when the issue gets updated"
-    categoryText = "This barchart groups the calls into 10 categories."
+    categoryText = "This barchart groups the calls into 10 categories - hover over the bars to get more information"
     weekdayText = "This barchart shows the number of calls made for every weekday in 2022"
-    heatmapText = "This heatmap shows the density of calls per day in 2022"
+    heatmapText = "How to use: this section includes a heatmap calendar, brushing timeline, and line chart. <br/>Hover over days on the heatmap to view more information. <br/>Use the brushing chart to zoom in on the data on the heatmap and line chart."
 
     // Links for info
     zipcodeLink = "<div class=\"tooltip-more-info\">More info <a href=\"https://www.city-data.com/zipmaps/Cincinnati-Ohio.html\" target=\"_blank\">here</a></div>"

@@ -78,20 +78,20 @@ class HeatMap {
         
     })
 
-    vis.svg.append("text")
-        .attr("class", "x label")
-        .attr("text-anchor", "middle")
-        .attr("transform", "translate(" + (vis.config.containerWidth / 2) + " ," + (vis.config.containerHeight - 5) + ")")
-        .text("Start of the Week (2022)");
+    // vis.svg.append("text")
+    //     .attr("class", "x label")
+    //     .attr("text-anchor", "middle")
+    //     .attr("transform", "translate(" + (vis.config.containerWidth / 2) + " ," + (vis.config.containerHeight - 5) + ")")
+    //     .text("Start of the Week (2022)");
 
-      vis.svg.append("text")
-        .attr("class", "y label")
-        .attr("text-anchor", "middle")
-        .attr("y", 20)
-        .attr("x",- (vis.config.containerHeight / 2))
-        .attr("dy", ".75em")
-        .attr("transform", "rotate(-90)")
-        .text("Week Day");
+      // vis.svg.append("text")
+      //   .attr("class", "y label")
+      //   .attr("text-anchor", "middle")
+      //   .attr("y", 20)
+      //   .attr("x",- (vis.config.containerHeight / 2))
+      //   .attr("dy", ".75em")
+      //   .attr("transform", "rotate(-90)")
+      //   .text("Week Day");
 
       vis.svg.append("text")
         .attr("class", "title")
