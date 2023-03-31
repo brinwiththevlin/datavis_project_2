@@ -171,7 +171,7 @@ function serviceNameCategories(d){
     return "Police";
   }
   else if (cat6Keys.some(dataIncludes)){
-    return "Buildings and Inspections";
+    return "Building and Insp.";
   }
   else if (cat7Keys.some(dataIncludes)){
     return "City Admin";

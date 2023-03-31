@@ -261,7 +261,7 @@ class Barchart {
         else if(cat == "Transportation & Eng.") return "Transportation & Engineering includes streets, bike racks, sunken area repairs, etc.";
         else if (cat == "Public Services") return "Public Services includes graffiti, trash dumping, street sweeping, etc.";
         else if (cat == "Police") return "Police includes non-emergency things including parking issues and police calls.";
-        else if (cat == "Building and Inspections") return "Buildings and Inspections includes housing, special fire inspections, constructions, etc.";
+        else if (cat == "Building and Insp.") return "Buildings and Inspections includes housing, special fire inspections, constructions, etc.";
         else if (cat == "City Admin") return "City Admin includes service compliments, information requests, and constitudent affairs inqueries.";
         else if (cat == "Sewer and water") return "Sewer and water includes issues with sewage, septic, manhole cover issues, etc.";
         else if (cat == "Schools, parks, rec.") return "Schools, parks, and recreation includes playground equipment problems, drinking fountain problems, park trash can overflowing, etc.";
