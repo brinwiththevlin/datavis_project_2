@@ -7,7 +7,7 @@ class Histogram {
 		this.config = {
 			parentElement: _config.parentElement,
 			containerWidth: _config.containerWidth || 500,
-			containerHeight: _config.containerHeight || 400,
+			containerHeight: _config.containerHeight || 300,
 			margin: _config.margin || {top: 35, right: 10, bottom: 30, left: 70},
 			title: _title,
 			xLabel: _xLabel,
@@ -30,7 +30,7 @@ class Histogram {
 		vis.xScale = d3.scaleLinear().domain([0, d3.max(vis.data, d => d[vis.aggregateAttr])])
 			.range([0, vis.width]);
 				
-		vis.yScale = d3.scaleLog()
+		vis.yScale = d3.scaleLinear()
 			.range([ vis.height, 0]);
 
         vis.xAxis = d3.axisBottom(vis.xScale)
@@ -126,7 +126,7 @@ class Histogram {
 		
 		let bins = histogram(vis.data);
 		
-		vis.yScale.domain([1e0, d3.max(bins, d => d.length)]);
+		vis.yScale.domain([0, d3.max(bins, d => d.length)]);
 
 		let u = vis.chart.selectAll("rect")
 			.data(bins)
@@ -152,7 +152,6 @@ class Histogram {
                 }
                 return newHeight;
             })
-			.style("fill", "#69b3a2")
 
 		// If less bars exist in the new histogram, delete bars no longer in use
 		u.exit().remove()

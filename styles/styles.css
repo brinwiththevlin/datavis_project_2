@@ -8,7 +8,7 @@ body {
 
 .rounded {
   border-radius: 15px !important;
-  margin: 18px;
+  margin: 20px;
 }
 
 .bg-light {
@@ -51,6 +51,12 @@ button {
   font-size: larger;
 }
 
+.pageinfo-text {
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
 .mapContainer {
   flex-direction: column;
   align-items: center;
@@ -76,7 +82,7 @@ button {
 .mapContainer .mapHeader {
   display: flex;
   align-self: self-end;
-  margin-top: 5px;
+  margin: 20px 20px 0 0;
 }
 .mapContainer .mapTitle {
   font-size: 20px;
@@ -108,10 +114,7 @@ button {
   width: 100%;
   z-index: 999999;
   bottom: 0px;
-  background-color: aliceblue;
-}
-.footerBar div {
-  margin-top: 10px;
+  background-color: #d3ddf5;
 }
 .footerBar span {
   text-align: center;
@@ -123,7 +126,7 @@ button {
   margin-bottom: 10px;
 }
 .footerBar .visInfo {
-  font-weight: 900;
+  font-size: 12px;
 }
 .footerBar .clearFiltersButton {
   margin-right: auto;
@@ -152,7 +155,7 @@ button {
   margin: 20px;
 }
 .barchart .bar, .histogram .bar {
-  fill: rgb(105, 179, 162);
+  fill: #a1d3ec;
   cursor: pointer;
 }
 .barchart .x-axis .tick text.active, .histogram .x-axis .tick text.active {
@@ -183,6 +186,7 @@ button {
 
 .timeline {
   margin: 20px;
+  padding: 20px;
 }
 
 .lineChartHolder {
@@ -190,7 +194,7 @@ button {
 }
 .lineChartHolder #linechart .chart-line {
   fill: none;
-  stroke: violet;
+  stroke: #77aac6;
   stroke-width: 3px;
   -webkit-clip-path: url(#clip);
           clip-path: url(#clip);

@@ -57,7 +57,8 @@ class LineChart {
             .attr("x", vis.config.width / 2 + vis.config.margin.left)
             .attr("y", 40 + vis.config.contextHeight + vis.config.margin.top)
             .attr("text-anchor", "middle")
-            .style("font-size", "24px")
+            .style("font-size", "20px")
+            .style("font-weight", "700")
             .text(vis.config.title);
 
         // Y-Axis Label
@@ -70,7 +71,7 @@ class LineChart {
 
         // X-Axis Label
         vis.svg.append("text")
-            .attr("transform", "translate(" + (vis.config.width / 2 + vis.config.margin.left) + ", " + (vis.config.height + 115 + vis.config.contextHeight + vis.config.contextMargin.bottom) + ")")
+            .attr("transform", "translate(" + (vis.config.width / 2 + vis.config.margin.left) + ", " + (vis.config.height + 115 + vis.config.contextHeight + vis.config.contextMargin.bottom + 20) + ")")
             .style("text-anchor", "middle")
             .text(vis.config.xLabel);
 
@@ -210,12 +211,12 @@ class LineChart {
       vis.focusLinePath
           .datum(vis.aggregatedData)
           .attr('d', vis.line)
-          .attr('fill', "violet");
+          .attr('fill', "#77aac6");
   
       vis.contextAreaPath
           .datum(vis.aggregatedData)
           .attr('d', vis.area)
-          .attr('fill', "#f1dbea");
+          .attr('fill', "#c1e7ff");
   
       vis.tooltipTrackingArea
           .on('mouseenter', () => {

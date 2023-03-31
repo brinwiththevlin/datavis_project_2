@@ -126,7 +126,7 @@ class HeatMap {
    
     // Build color scale
     vis.myColor = d3.scaleLinear()
-      .range(["#f1dbea", "violet"])
+      .range(["#c1e7ff", "#004c6d"])
       .domain([0, d3.max(vis.data.filter(d => !d.filtered), d => d.count)])
 
     vis.renderVis()
@@ -169,6 +169,7 @@ class HeatMap {
           .attr('dy', '.71em')
           .attr("transform", "rotate(-90)")
           .style('text-anchor', 'end')
+          .style('font-size', '15px')
           .text(d.callDate.substring(0, 5));
       })
 
@@ -177,9 +178,10 @@ class HeatMap {
         vis.svg.append('text')
           .attr('class', 'label')
           .attr('y', 275 - 35*i)
-          .attr('x', 65)
+          .attr('x', 75)
           .attr('dy', '.71em')
           .style('text-anchor', 'end')
+          .style('font-size', '15px')
           .text(d);
       })
 

@@ -9,7 +9,7 @@ body {
 
 .rounded {
   border-radius: 15px!important;
-  margin: 18px;
+  margin: 20px;
 }
 
 .bg-light {
@@ -52,6 +52,12 @@ button{
   }
 }
 
+.pageinfo-text {
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 5px;;
+}
+
 .mapContainer{
   flex-direction: column;
   align-items: center;
@@ -77,7 +83,7 @@ button{
   .mapHeader {
     display: flex;
     align-self: self-end;
-    margin-top: 5px;
+    margin: 20px 20px 0 0;
   }
   .mapTitle {
     font-size: 20px;
@@ -110,10 +116,7 @@ button{
   width: 100%;
   z-index: 999999;
   bottom: 0px;
-  background-color: aliceblue;
-  div{
-    margin-top: 10px;
-  }
+  background-color: #d3ddf5;
   span{
     text-align: center;
     margin: 10px 5px;
@@ -124,7 +127,7 @@ button{
     margin-bottom: 10px;
   }
   .visInfo{
-    font-weight: 900;
+    font-size: 12px;
   }
   .clearFiltersButton {
     margin-right: auto;
@@ -157,7 +160,7 @@ button{
   // border: 3px solid black;
   margin: 20px;
   .bar{
-      fill: rgb(105, 179, 162);
+      fill: #a1d3ec;
       cursor: pointer;
   }
   .x-axis{
@@ -189,8 +192,8 @@ button{
 // END BAR CHARTS
 
 .timeline{
-  // border: 3px solid black;
   margin: 20px;
+  padding: 20px;
 }
 
 .lineChartHolder{
@@ -198,7 +201,7 @@ button{
   #linechart{
       .chart-line {
           fill: none;
-          stroke: violet;
+          stroke: #77aac6;
           stroke-width: 3px;
           clip-path: url(#clip);
       }
