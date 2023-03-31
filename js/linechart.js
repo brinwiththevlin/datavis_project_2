@@ -43,8 +43,12 @@ class LineChart {
             .nice();
 
         // Initialize axes
-        vis.xAxisFocus = d3.axisBottom(vis.xScaleFocus).tickSizeOuter(0);
-        vis.xAxisContext = d3.axisBottom(vis.xScaleContext).tickSizeOuter(0);
+        vis.xAxisFocus = d3.axisBottom(vis.xScaleFocus)
+            .tickSizeOuter(0)
+            .tickFormat(d3.timeFormat("%b"));
+        vis.xAxisContext = d3.axisBottom(vis.xScaleContext)
+            .tickSizeOuter(0)
+            .tickFormat(d3.timeFormat("%b"));
         vis.yAxisFocus = d3.axisLeft(vis.yScaleFocus);
 
         // Define size of SVG drawing area
@@ -70,7 +74,7 @@ class LineChart {
 
         // X-Axis Label
         vis.svg.append("text")
-            .attr("transform", "translate(" + (vis.config.width / 2 + vis.config.margin.left) + ", " + (vis.config.height + 115 + vis.config.contextHeight + vis.config.contextMargin.bottom) + ")")
+            .attr("transform", "translate(" + (vis.config.width / 2 + vis.config.margin.left) + ", " + (vis.config.height + 125 + vis.config.contextHeight + vis.config.contextMargin.bottom) + ")")
             .style("text-anchor", "middle")
             .text(vis.config.xLabel);
 
@@ -245,7 +249,7 @@ class LineChart {
             vis.tooltip.select('text')
                 .attr('transform', `translate(${vis.xScaleFocus(d.key)},${(vis.yScaleFocus(d.count) - 15)})`)
                 .style('user-select', 'none')
-                .text(Math.round(d.count));
+                .text(Math.round(d.count));s
           });
       
       // Update the axes

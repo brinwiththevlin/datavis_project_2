@@ -3,16 +3,18 @@ class Barchart {
      * @param {Object}
      * @param {Array}
      */
-    constructor(_config, _data, _aggregateAttr, _title, _xLabel, _yLabel, _XAxisLabelHeight = 20) {
+    constructor(_config, _data, _aggregateAttr, _title, _xLabel, _yLabel, _XAxisLabelHeight = 20, _infoText = "", _infoLink = "") {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: _config.containerWidth || 300,
-            containerHeight: _config.containerHeight || 300,
-            margin: _config.margin || {top: 35, right: 10, bottom: 20, left: 70},
+            containerWidth: _config.containerWidth || 400,
+            containerHeight: _config.containerHeight || 400,
+            margin: _config.margin || {top: 45, right: 10, bottom: 20, left: 80},
             title: _title,
             xLabel: _xLabel,
             yLabel: _yLabel,
-            XAxisLabelHeight: _XAxisLabelHeight
+            XAxisLabelHeight: _XAxisLabelHeight,
+            infoText: _infoText,
+            infoLink: _infoLink
         }
         this.data = _data;
         this.aggregateAttr = _aggregateAttr;
@@ -65,8 +67,33 @@ class Barchart {
             .attr("x", vis.config.containerWidth / 2)
             .attr("y", 25)
             .attr("text-anchor", "middle")
-            .style("font-size", "24px")
+            .style("font-size", "20px")
+            .style("font-weight", "700")
             .text(vis.config.title);
+        
+        // Info Logo
+        vis.svg
+            .append("svg:image")
+            .attr("xlink:href", "../styles/info-logo.png")
+            .attr('class', 'info-logo')
+            .attr("transform", "translate(" + (vis.config.containerWidth - 25) + " ," + (7) + ")")
+            .on('click', (event, d) => {
+                if (!d3.select('#info-tooltip').classed("selected") ){
+                    d3.select('#info-tooltip').classed("selected", true)
+                    .style('display', 'block')
+                    .style('left', (event.pageX + 5) + 'px')   
+                    .style('top', (event.pageY) + 'px')
+                    .html(`
+                        ${vis.config.infoLink}
+                        <div class="tooltip-description">${vis.config.infoText}</div>
+                        
+                    `);
+                    }else{
+                    d3.select('#info-tooltip').classed("selected", false);
+                    d3.select('#info-tooltip').style('display', 'none');
+                    }
+                
+            })
 
         // Y-Axis Label
         vis.svg.append("text")
@@ -77,10 +104,11 @@ class Barchart {
             .text(vis.config.yLabel);
 
         // X-Axis Label
-        vis.svg.append("text")
-                .attr("transform", "translate(" + (vis.config.containerWidth / 2) + " ," + (vis.config.containerHeight - 5) + ")")
-                .style("text-anchor", "middle")
-                .text(vis.config.xLabel);
+        //removed x-axis label because you don't need an explanation of what days of the week or categories- it's easy to see and less clutter
+        // vis.svg.append("text")
+        //     .attr("transform", "translate(" + (vis.config.containerWidth / 2) + " ," + (vis.config.containerHeight - 5) + ")")
+        //     .style("text-anchor", "middle")
+        //     .text(vis.config.xLabel);
     }
 
     // Used to sort by a property value. Currently sorts in descending order by frequency.
@@ -100,6 +128,15 @@ class Barchart {
         vis.aggregatedData = Array.from(aggregatedDataMap, ([key, count]) => ({ key, count }));
 
         vis.aggregatedData.sort(this.compare);
+
+        if (vis.aggregateAttr == "zipcode"){
+            let other_zipcode_count = vis.aggregatedData.reduce(function (sum, item) {
+              return sum + ((vis.aggregatedData.indexOf(item) >= 20) ? item.count : 0);
+            }, 0);
+            vis.other_zipcode_string = Object.keys(vis.aggregatedData.slice(20, vis.aggregatedData.length)).map(key => vis.aggregatedData[key].key).join(", ");
+            vis.aggregatedData = vis.aggregatedData.slice(0, 19);
+            vis.aggregatedData.push({key: "Other", count: other_zipcode_count});
+          }
 
         vis.xValue = d => d.key;
         vis.yValue = d => d.count;
@@ -149,6 +186,25 @@ class Barchart {
                 <div class="tooltip-title">${vis.config.xLabel}: ${d.key}</div>
                 <div class="tooltip-title">${vis.config.yLabel}: ${d.count}</div>
             `);
+
+            //If hovering over the "Other" col in the Zipcode barchart, also show what zipcodes are included in "Other"
+            if (d.key == "Other" && vis.aggregateAttr == "zipcode"){
+                d3.select('#tooltip')
+                .html(`
+                    <div class="tooltip-title">${vis.config.xLabel}: ${d.key}</div>
+                    <div class="tooltip-title">${vis.other_zipcode_string}</div>
+                    <div class="tooltip-title">${vis.config.yLabel}: ${d.count}</div>
+                `);
+            }
+            else if(vis.aggregateAttr == "category"){
+                let keyDesc = this.categoryAdditionalTooltip(d.key);
+                d3.select('#tooltip')
+                .html(`
+                    <div class="tooltip-title">${vis.config.xLabel}: ${d.key}</div>
+                    <div class="tooltip-title">${keyDesc}</div>
+                    <div class="tooltip-title">${vis.config.yLabel}: ${d.count}</div>
+                `);
+            }
         })
         .on('mouseleave', () => {
             d3.select('#tooltip').style('display', 'none');
@@ -197,4 +253,19 @@ class Barchart {
         }
         filterData(); // Call global function to update visuals
     }
+
+    categoryAdditionalTooltip(cat){
+        //City Admin includes service compliments, information requests, and constitudent affairs inqueries.
+        if (cat == "Accessibility") return "Accessibility includes ADA complaints, sidewalk obstructions, audible signal repairs, etc.";
+        else if(cat == "Public Health") return "Public Health includes mold, rodents, food borne illnesses, etc.";
+        else if(cat == "Transportation & Eng.") return "Transportation & Engineering includes streets, bike racks, sunken area repairs, etc.";
+        else if (cat == "Public Services") return "Public Services includes graffiti, trash dumping, street sweeping, etc.";
+        else if (cat == "Police") return "Police includes non-emergency things including parking issues and police calls.";
+        else if (cat == "Building and Insp.") return "Buildings and Inspections includes housing, special fire inspections, constructions, etc.";
+        else if (cat == "City Admin") return "City Admin includes service compliments, information requests, and constitudent affairs inqueries.";
+        else if (cat == "Sewer and water") return "Sewer and water includes issues with sewage, septic, manhole cover issues, etc.";
+        else if (cat == "Schools, parks, rec.") return "Schools, parks, and recreation includes playground equipment problems, drinking fountain problems, park trash can overflowing, etc.";
+        else if (cat == "Rentals") return "Rentals includes defective plumbing issues, short term rentals, unsanitary living conditions, etc.";
+        else if (cat == "Other") return "Other includes issues such as outdoor cafe seating, private utility abutting owner, etc.";
+  }
 }

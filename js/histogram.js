@@ -3,16 +3,17 @@ class Histogram {
      * @param {Object}
      * @param {Array}
      */
-    constructor(_config, _data, _aggregateAttr, _title, _xLabel, _yLabel, _XAxisLabelHeight = 20) {
+    constructor(_config, _data, _aggregateAttr, _title, _xLabel, _yLabel, _XAxisLabelHeight = 20, _infoText = "") {
 		this.config = {
 			parentElement: _config.parentElement,
 			containerWidth: _config.containerWidth || 500,
 			containerHeight: _config.containerHeight || 400,
-			margin: _config.margin || {top: 35, right: 10, bottom: 30, left: 70},
+			margin: _config.margin || {top: 45, right: 10, bottom: 30, left: 80},
 			title: _title,
 			xLabel: _xLabel,
 			yLabel: _yLabel,
-			XAxisLabelHeight: _XAxisLabelHeight
+			XAxisLabelHeight: _XAxisLabelHeight,
+            infoText: _infoText
 			}
 		this.aggregateAttr = _aggregateAttr;
         this.data = _data;
@@ -29,7 +30,7 @@ class Histogram {
 		vis.xScale = d3.scaleLinear().domain([0, d3.max(vis.data, d => d[vis.aggregateAttr])])
 			.range([0, vis.width]);
 				
-		vis.yScale = d3.scaleLog()
+		vis.yScale = d3.scaleLinear()
 			.range([ vis.height, 0]);
 
         vis.xAxis = d3.axisBottom(vis.xScale)
@@ -64,8 +65,31 @@ class Histogram {
             .attr("x", vis.config.containerWidth / 2)
             .attr("y", 25)
             .attr("text-anchor", "middle")
-            .style("font-size", "24px")
+            .style("font-size", "20px")
+            .style("font-weight", "700")
             .text(vis.config.title);
+
+        // Info Logo
+        vis.svg.append("svg:image")
+            .attr("xlink:href", "../styles/info-logo.png")
+            .attr('class', 'info-logo')
+            .attr("transform", "translate(" + (vis.config.containerWidth - 25) + " ," + (7) + ")")
+            .on('click', (event, d) => {
+                if (!d3.select('#info-tooltip').classed("selected") ){
+                    d3.select('#info-tooltip').classed("selected", true)
+                    .style('display', 'block')
+                    .style('left', (event.pageX + 5) + 'px')   
+                    .style('top', (event.pageY) + 'px')
+                    .html(`
+                        <div class="tooltip-description">${vis.config.infoText}</div>
+                        
+                    `);
+                    }else{
+                    d3.select('#info-tooltip').classed("selected", false);
+                    d3.select('#info-tooltip').style('display', 'none');
+                    }
+                
+            })
 
         // Y-Axis Label
         vis.svg.append("text")
@@ -135,8 +159,7 @@ class Histogram {
 
 		vis.xAxisG.call(vis.xAxis)
             .selectAll("text")
-            .attr("transform", "translate(-10,0)rotate(-55)")
-            .style("text-anchor", "end");
+            .style("text-anchor", "middle");
         vis.yAxisG.call(vis.yAxis);
 	
 		this.chart.selectAll("rect").on('mouseover', (event, d) => {

@@ -1,7 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 body {
-  background: #f8f8f8;
+  background: #EEF2FF;
   margin: 0;
   min-height: 100%;
+  font-family: "Varela Round", sans-serif;
+}
+
+.data-info {
+  padding: 18px;
+  width: 1470px;
+}
+
+.rounded {
+  border-radius: 15px !important;
+  margin: 18px;
+}
+
+.bg-light {
+  background-color: white !important;
 }
 
 .flex-container {
@@ -44,16 +60,14 @@ button {
   flex-direction: column;
   align-items: center;
   margin: 20px;
-  border: 3px solid black;
 }
 .mapContainer select {
-  width: 450px;
+  width: 200px;
 }
 .mapContainer #mapDiv {
   width: 500px;
-  height: 500px;
+  height: 400px;
   align-self: center;
-  margin: 20px 20px;
 }
 .mapContainer #mapDiv circle.filtered {
   display: none;
@@ -63,6 +77,35 @@ button {
 }
 .mapContainer #mapDiv path {
   fill: none;
+}
+.mapContainer .mapHeader {
+  display: flex;
+  align-self: self-end;
+  margin-top: 5px;
+}
+.mapContainer .mapTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+.mapContainer .mapMarkerColor .mapBGToggle {
+  font-size: 15px;
+}
+.mapContainer .mapFilterLegend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mapContainer .mapFilter {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-bottom: 30px;
+  width: 280px;
+}
+.mapContainer .mapInnerContainer {
+  display: flex;
+  margin: 20px;
 }
 
 .footerBar {
@@ -101,13 +144,6 @@ button {
   color: white;
 }
 
-.timeline {
-  border: 3px solid black;
-} 
-
-/* #heatTimeDiv {
-  border: 3px solid black;
-} */
 #heatTimeDiv rect:hover {
   stroke: #000000;
   stroke-width: 2px;
@@ -118,7 +154,6 @@ button {
 }
 
 .barchart, .histogram {
-  border: 3px solid black;
   margin: 20px;
 }
 .barchart .bar, .histogram .bar {
@@ -131,6 +166,10 @@ button {
 }
 .barchart .x-axis .tick text, .histogram .x-axis .tick text {
   cursor: pointer;
+}
+
+.tick {
+  font-size: 12px;
 }
 
 .bar {
@@ -146,18 +185,25 @@ button {
   stroke-width: 4px;
 }
 
-/* .lineChartHolder {
-  border: 3px solid black;
+.info-logo {
+  width: 20px;
+  height: 20px;
+}
+
+.timeline {
   margin: 20px;
+}
+
+.lineChartHolder {
   flex-basis: auto;
 }
 .lineChartHolder #linechart .chart-line {
   fill: none;
-  stroke: rgb(105, 179, 162);
+  stroke: violet;
   stroke-width: 3px;
   -webkit-clip-path: url(#clip);
           clip-path: url(#clip);
-} */
+}
 
 /* TOOLTIPS */
 #tooltip {
@@ -186,6 +232,24 @@ button {
   color: black;
   font-family: Arial, Helvetica, sans-serif;
   display: inline;
+}
+
+#info-tooltip {
+  position: absolute;
+  display: none;
+  background: #fff;
+  box-shadow: 2px 2px 3px 0px rgba(92, 92, 92, 0.5);
+  border: 1px solid #ddd;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  z-index: 99999;
+}
+
+.map-info-tool {
+  width: 20px;
+  height: 20px;
+  margin: 15px 20px 0 224px;
 }
 
 /* END TOOLTIPS *//*# sourceMappingURL=styles.css.map */

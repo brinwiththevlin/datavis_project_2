@@ -44,6 +44,16 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
       }
     })
 
+    // Texts for info tool
+    zipcodeText = "This barchart shows the top 9 zipcodes that received the highest number of calls in the area"
+    issueResText = "This histogram shows the days between when calls are made to when the issue gets updated"
+    categoryText = "This barchart groups the calls into 10 categories - hover over the bars to get more information"
+    weekdayText = "This barchart shows the number of calls made for every weekday in 2022"
+    heatmapText = "How to use: this section includes a heatmap calendar, brushing timeline, and line chart. <br/>Hover over days on the heatmap to view more information. <br/>Use the brushing chart to zoom in on the data on the heatmap and line chart."
+
+    // Links for info
+    zipcodeLink = "<div class=\"tooltip-more-info\">More info <a href=\"https://www.city-data.com/zipmaps/Cincinnati-Ohio.html\" target=\"_blank\">here</a></div>"
+
     //Plot map
     leafletMap = new LeafletMap({ parentElement: '#mapDiv'}, data, "color_callType");
 
@@ -53,7 +63,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     // leafletMap.updateVis();
 
-    heatMap = new HeatMap({ parentElement: '#heatTimeDiv'}, data, null);
+    heatMap = new HeatMap({ parentElement: '#heatTimeDiv'}, data, null, heatmapText);
     //heatMap.updateVis();
 
     linechart = new LineChart({ parentElement: '#linechart'},
@@ -61,25 +71,27 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     //linechart.updateVis();
 
     callsByWeekDay = new Barchart({
-      parentElement: '#callsByWeekDay',
-      }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
+      parentElement: '#callsByWeekDay', 
+      }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30, weekdayText);
     //callsByWeekDay.updateVis();
 
     callsByZipcode = new Barchart({
       parentElement: '#callsByZipcode',
-      containerWidth: 700,
-      containerHeight: 400
-      }, data, "zipcode", "Calls By Zipcode", "Zipcode", "Number of Calls", 30, false);
+      containerWidth: 600,
+      containerHeight: 480,
+      margin:{top: 70, right: 10, bottom: 20, left: 90}
+      }, data, "zipcode", "Calls By Zipcode", "Zipcode", "Number of Calls", 30, zipcodeText, zipcodeLink);
     //callsByZipcode.updateVis();
     
     callsByCategory = new Barchart({
       parentElement: '#callsByCategory',
-      }, data, "category", "Calls By Category", "Category", "Number of Calls", 110);
+      containerWidth: 400,
+      }, data, "category", "Calls By Category", "Category", "Number of Calls", 110, categoryText);
     //callsByCategory.updateVis();
 
     requestReceivedUpdated = new Histogram({
       parentElement: '#requestReceivedUpdated',
-    }, data, "days_between", "Days Between Call Received and Issue Updated", "Days Between Dates", "Number of Calls")
+    }, data, "days_between", "Issue Resolution Time", "Days Between Dates", "Number of Calls", 20, issueResText)
     requestReceivedUpdated.updateVis(10);
 
     descriptionWordCloud = new WordCloud({parentElement: "#descriptionWordCloud"}, data)
@@ -152,7 +164,7 @@ function serviceNameCategories(d){
     return "Public Health";
   }
   else if (cat3Keys.some(dataIncludes)){
-    return "Transportation & Engineering";
+    return "Transportation & Eng.";
   }
   else if (cat4Keys.some(dataIncludes)){
     return "Public Services";
@@ -161,7 +173,7 @@ function serviceNameCategories(d){
     return "Police";
   }
   else if (cat6Keys.some(dataIncludes)){
-    return "Buildings and Inspections";
+    return "Building and Insp.";
   }
   else if (cat7Keys.some(dataIncludes)){
     return "City Admin";
@@ -170,7 +182,7 @@ function serviceNameCategories(d){
     return "Sewer and water";
   }
   else if (cat9Keys.some(dataIncludes)){
-    return "Schools, parks, recreation";
+    return "Schools, parks, rec.";
   }
   else if (cat10Keys.some(dataIncludes)){
     return "Rentals";
