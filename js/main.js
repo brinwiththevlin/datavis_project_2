@@ -62,7 +62,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     callsByWeekDay = new Barchart({
       parentElement: '#callsByWeekDay',
-      }, data, "weekday_requested", "Calls By Week Day", "", "Number of Calls", 30); //removed x-axis label because you don't need an explanation of what days of the week are
+      }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30);
     //callsByWeekDay.updateVis();
 
     callsByZipcode = new Barchart({

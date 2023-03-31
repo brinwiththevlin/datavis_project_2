@@ -77,10 +77,13 @@ class Barchart {
             .text(vis.config.yLabel);
 
         // X-Axis Label
-        vis.svg.append("text")
-                .attr("transform", "translate(" + (vis.config.containerWidth / 2) + " ," + (vis.config.containerHeight - 5) + ")")
-                .style("text-anchor", "middle")
-                .text(vis.config.xLabel);
+        //removed x-axis label because you don't need an explanation of what days of the week are
+        if (vis.aggregateAttr != "weekday_requested"){
+            vis.svg.append("text")
+            .attr("transform", "translate(" + (vis.config.containerWidth / 2) + " ," + (vis.config.containerHeight - 5) + ")")
+            .style("text-anchor", "middle")
+            .text(vis.config.xLabel);
+        }
     }
 
     // Used to sort by a property value. Currently sorts in descending order by frequency.
