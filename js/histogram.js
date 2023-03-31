@@ -8,7 +8,7 @@ class Histogram {
 			parentElement: _config.parentElement,
 			containerWidth: _config.containerWidth || 500,
 			containerHeight: _config.containerHeight || 400,
-			margin: _config.margin || {top: 35, right: 10, bottom: 30, left: 70},
+			margin: _config.margin || {top: 45, right: 10, bottom: 30, left: 80},
 			title: _title,
 			xLabel: _xLabel,
 			yLabel: _yLabel,

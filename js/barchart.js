@@ -6,9 +6,9 @@ class Barchart {
     constructor(_config, _data, _aggregateAttr, _title, _xLabel, _yLabel, _XAxisLabelHeight = 20, _infoText = "", _infoLink = "") {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: _config.containerWidth || 300,
-            containerHeight: _config.containerHeight || 300,
-            margin: _config.margin || {top: 35, right: 10, bottom: 20, left: 70},
+            containerWidth: _config.containerWidth || 400,
+            containerHeight: _config.containerHeight || 400,
+            margin: _config.margin || {top: 45, right: 10, bottom: 20, left: 80},
             title: _title,
             xLabel: _xLabel,
             yLabel: _yLabel,
@@ -196,6 +196,15 @@ class Barchart {
                     <div class="tooltip-title">${vis.config.yLabel}: ${d.count}</div>
                 `);
             }
+            else if(vis.aggregateAttr == "category"){
+                let keyDesc = this.categoryAdditionalTooltip(d.key);
+                d3.select('#tooltip')
+                .html(`
+                    <div class="tooltip-title">${vis.config.xLabel}: ${d.key}</div>
+                    <div class="tooltip-title">${keyDesc}</div>
+                    <div class="tooltip-title">${vis.config.yLabel}: ${d.count}</div>
+                `);
+            }
         })
         .on('mouseleave', () => {
             d3.select('#tooltip').style('display', 'none');
@@ -244,4 +253,19 @@ class Barchart {
         }
         filterData(); // Call global function to update visuals
     }
+
+    categoryAdditionalTooltip(cat){
+        //City Admin includes service compliments, information requests, and constitudent affairs inqueries.
+        if (cat == "Accessibility") return "Accessibility includes ADA complaints, sidewalk obstructions, audible signal repairs, etc.";
+        else if(cat == "Public Health") return "Public Health includes mold, rodents, food borne illnesses, etc.";
+        else if(cat == "Transportation & Eng.") return "Transportation & Engineering includes streets, bike racks, sunken area repairs, etc.";
+        else if (cat == "Public Services") return "Public Services includes graffiti, trash dumping, street sweeping, etc.";
+        else if (cat == "Police") return "Police includes non-emergency things including parking issues and police calls.";
+        else if (cat == "Building and Inspections") return "Buildings and Inspections includes housing, special fire inspections, constructions, etc.";
+        else if (cat == "City Admin") return "City Admin includes service compliments, information requests, and constitudent affairs inqueries.";
+        else if (cat == "Sewer and water") return "Sewer and water includes issues with sewage, septic, manhole cover issues, etc.";
+        else if (cat == "Schools, parks, rec.") return "Schools, parks, and recreation includes playground equipment problems, drinking fountain problems, park trash can overflowing, etc.";
+        else if (cat == "Rentals") return "Rentals includes defective plumbing issues, short term rentals, unsanitary living conditions, etc.";
+        else if (cat == "Other") return "Other includes issues such as outdoor cafe seating, private utility abutting owner, etc.";
+  }
 }

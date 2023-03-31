@@ -74,7 +74,7 @@ class LineChart {
 
         // X-Axis Label
         vis.svg.append("text")
-            .attr("transform", "translate(" + (vis.config.width / 2 + vis.config.margin.left) + ", " + (vis.config.height + 115 + vis.config.contextHeight + vis.config.contextMargin.bottom) + ")")
+            .attr("transform", "translate(" + (vis.config.width / 2 + vis.config.margin.left) + ", " + (vis.config.height + 125 + vis.config.contextHeight + vis.config.contextMargin.bottom) + ")")
             .style("text-anchor", "middle")
             .text(vis.config.xLabel);
 

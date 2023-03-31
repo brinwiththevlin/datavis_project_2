@@ -165,8 +165,8 @@ class HeatMap {
       months.forEach((d, i)=>{
         vis.svg.append('text')
           .attr('class', 'label')
-          .attr('y', 260)
-          .attr('x', 64*i+3)
+          .attr('y', 310)
+          .attr('x', 64*i+80)
           .attr('dy', '.71em')
           .text(d);
       })
@@ -176,7 +176,7 @@ class HeatMap {
         vis.svg.append('text')
           .attr('class', 'label')
           .attr('y', 275 - 35*i)
-          .attr('x', 65)
+          .attr('x', 75)
           .attr('dy', '.71em')
           .style('text-anchor', 'end')
           .text(d);
