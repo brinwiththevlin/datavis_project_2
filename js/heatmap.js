@@ -137,18 +137,17 @@ class HeatMap {
         // .attr("transform", "rotate(-90)")
         .text("Density of Calls Per Day");
       //custom x-axis labels
-      let weekIndex = vis.xScale.domain().filter(d => d%5==0)
-      let days = vis.data.filter(d => weekIndex.includes(d.weeknum) && d.weekday == "Sun" || d.weeknum == 0)
-      days.sort((a,b) => a.weeknum - b.weeknum); 
-      days.forEach((d, i)=>{
+      // let weekIndex = vis.xScale.domain().filter(d => d%5==0)
+      // let days = vis.data.filter(d => weekIndex.includes(d.weeknum) && d.weekday == "Sun" || d.weeknum == 0)
+      // days.sort((a,b) => a.weeknum - b.weeknum); 
+      let months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+      months.forEach((d, i)=>{
         vis.svg.append('text')
           .attr('class', 'label')
-          .attr('y', 64*i)
-          .attr('x', -275)
+          .attr('y', 260)
+          .attr('x', 64*i+3)
           .attr('dy', '.71em')
-          .attr("transform", "rotate(-90)")
-          .style('text-anchor', 'end')
-          .text(d.callDate.substring(0, 5));
+          .text(d);
       })
 
       //custom y-axis labels
