@@ -8,7 +8,7 @@ class Histogram {
 			parentElement: _config.parentElement,
 			containerWidth: _config.containerWidth || 500,
 			containerHeight: _config.containerHeight || 400,
-			margin: _config.margin || {top: 35, right: 10, bottom: 30, left: 70},
+			margin: _config.margin || {top: 45, right: 10, bottom: 30, left: 80},
 			title: _title,
 			xLabel: _xLabel,
 			yLabel: _yLabel,
@@ -30,7 +30,7 @@ class Histogram {
 		vis.xScale = d3.scaleLinear().domain([0, d3.max(vis.data, d => d[vis.aggregateAttr])])
 			.range([0, vis.width]);
 				
-		vis.yScale = d3.scaleLog()
+		vis.yScale = d3.scaleLinear()
 			.range([ vis.height, 0]);
 
         vis.xAxis = d3.axisBottom(vis.xScale)
@@ -159,8 +159,7 @@ class Histogram {
 
 		vis.xAxisG.call(vis.xAxis)
             .selectAll("text")
-            .attr("transform", "translate(-10,0)rotate(-55)")
-            .style("text-anchor", "end");
+            .style("text-anchor", "middle");
         vis.yAxisG.call(vis.yAxis);
 	
 		this.chart.selectAll("rect").on('mouseover', (event, d) => {

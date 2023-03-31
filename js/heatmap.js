@@ -78,20 +78,20 @@ class HeatMap {
         
     })
 
-    vis.svg.append("text")
-        .attr("class", "x label")
-        .attr("text-anchor", "middle")
-        .attr("transform", "translate(" + (vis.config.containerWidth / 2) + " ," + (vis.config.containerHeight - 5) + ")")
-        .text("Start of the Week (2022)");
+    // vis.svg.append("text")
+    //     .attr("class", "x label")
+    //     .attr("text-anchor", "middle")
+    //     .attr("transform", "translate(" + (vis.config.containerWidth / 2) + " ," + (vis.config.containerHeight - 5) + ")")
+    //     .text("Start of the Week (2022)");
 
-      vis.svg.append("text")
-        .attr("class", "y label")
-        .attr("text-anchor", "middle")
-        .attr("y", 20)
-        .attr("x",- (vis.config.containerHeight / 2))
-        .attr("dy", ".75em")
-        .attr("transform", "rotate(-90)")
-        .text("Week Day");
+      // vis.svg.append("text")
+      //   .attr("class", "y label")
+      //   .attr("text-anchor", "middle")
+      //   .attr("y", 20)
+      //   .attr("x",- (vis.config.containerHeight / 2))
+      //   .attr("dy", ".75em")
+      //   .attr("transform", "rotate(-90)")
+      //   .text("Week Day");
 
       vis.svg.append("text")
         .attr("class", "title")
@@ -158,18 +158,17 @@ class HeatMap {
       });
 
       //custom x-axis labels
-      let weekIndex = vis.xScale.domain().filter(d => d%5==0)
-      let days = vis.data.filter(d => weekIndex.includes(d.weeknum) && d.weekday == "Sun" || d.weeknum == 0)
-      days.sort((a,b) => a.weeknum - b.weeknum); 
-      days.forEach((d, i)=>{
+      // let weekIndex = vis.xScale.domain().filter(d => d%5==0)
+      // let days = vis.data.filter(d => weekIndex.includes(d.weeknum) && d.weekday == "Sun" || d.weeknum == 0)
+      // days.sort((a,b) => a.weeknum - b.weeknum); 
+      let months = ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+      months.forEach((d, i)=>{
         vis.svg.append('text')
           .attr('class', 'label')
-          .attr('y', 64*i + 80)
-          .attr('x', -320)
+          .attr('y', 310)
+          .attr('x', 64*i+80)
           .attr('dy', '.71em')
-          .attr("transform", "rotate(-90)")
-          .style('text-anchor', 'end')
-          .text(d.callDate.substring(0, 5));
+          .text(d);
       })
 
       //custom y-axis labels
@@ -177,7 +176,7 @@ class HeatMap {
         vis.svg.append('text')
           .attr('class', 'label')
           .attr('y', 275 - 35*i)
-          .attr('x', 65)
+          .attr('x', 75)
           .attr('dy', '.71em')
           .style('text-anchor', 'end')
           .text(d);
