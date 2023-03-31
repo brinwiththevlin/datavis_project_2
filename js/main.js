@@ -93,6 +93,8 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     }, data, "days_between", "Issue Resolution Time", "Days Between Dates", "Number of Calls", 20, issueResText)
     requestReceivedUpdated.updateVis(10);
 
+    descriptionWordCloud = new WordCloud({parentElement: "#descriptionWordCloud"}, data)
+    //descriptionWordCloud.updateVis()
     filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, callsByZipcode, requestReceivedUpdated, linechart];
     filterData(); // initializes filteredData array (to show count on refresh)
   })

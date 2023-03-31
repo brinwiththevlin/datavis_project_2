@@ -55,11 +55,15 @@
         <div class="flex-container bg-light rounded" style="height: fit-content">
             <svg id="requestReceivedUpdated"></svg>
         </div>
+        
         <div class="timeline flex-container bg-light rounded" style="width:min-content">
             <div>
                 <svg id="heatTimeDiv"></svg>
             </div>
-            <div class="lineChartHolder"><svg id="linechart"></svg></div>    
+            <div class="lineChartHolder"><svg id="linechart"></svg></div>
+            <div style="border: 3px solid black;">
+                <div id="descriptionWordCloud"></div>
+            </div>    
         </div>
     </div>
     <footer class="flex-container footerBar">
@@ -83,6 +87,9 @@
     <!-- turf  -->
     <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
 
+    <!-- D3.cloud -->
+    <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+
     <!-- JS files -->
     <script src="js/main.js"></script>
     <script src="js/barchart.js"></script>
@@ -90,6 +97,7 @@
     <script src="js/leafletMap.js"></script>
     <script src="js/heatmap.js"></script>
     <script src="js/linechart.js"></script>
+    <script src="js/wordCloud.js"></script>
 
     <div id="tooltip"></div>
     <div id="info-tooltip"></div>
