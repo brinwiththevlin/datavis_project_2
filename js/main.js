@@ -1,7 +1,7 @@
 // GLOBAL VARIABLES
 let data;
 let leafletMap;
-let globalDataFilter = [];
+let globalDataFilter = [["requested_date", []]];
 let filterableVisualizations = [];
 //-------------------------//
 
@@ -11,9 +11,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     console.log('Data loading complete. Work with dataset.');
         
     parseTime = d3.timeParse("%Y-%m-%d")
-    //process the data
 
-    parseTime = d3.timeParse("%Y-%m-%d")
     data.forEach(d => {
       let requested_parse = parseTime(d.requested_date)
       //TODO confirm that replace method doesn't remove " from that is not leading or trailing
@@ -58,34 +56,43 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     //Plot map
     leafletMap = new LeafletMap({ parentElement: '#mapDiv'}, data, "color_callType");
+
+    //update unmapped data count
+    let unmappedCount = data.filter(d => d.unmapped === true).length
+    d3.select("#unmappedCall").text("# of Calls Not Displayed: "+ unmappedCount)
+
     // leafletMap.updateVis();
 
     heatMap = new HeatMap({ parentElement: '#heatTimeDiv'}, data, null, heatmapText);
     //heatMap.updateVis();
 
+    linechart = new LineChart({ parentElement: '#linechart'},
+		data, "requested_date", "Calls over Time", "Date Requested", "# of Calls");
+    //linechart.updateVis();
+
     callsByWeekDay = new Barchart({
       parentElement: '#callsByWeekDay',
       }, data, "weekday_requested", "Calls By Week Day", "Week Day", "Number of Calls", 30, weekdayText);
-    callsByWeekDay.updateVis();
+    //callsByWeekDay.updateVis();
 
     callsByZipcode = new Barchart({
       parentElement: '#callsByZipcode',
-      containerWidth: 700,
+      containerWidth: 600,
       containerHeight: 400
       }, data, "zipcode", "Calls By Zipcode", "Zipcode", "Number of Calls", 30, zipcodeText, zipcodeLink);
-    callsByZipcode.updateVis();
+    //callsByZipcode.updateVis();
     
     callsByCategory = new Barchart({
       parentElement: '#callsByCategory',
       }, data, "category", "Calls By Category", "Category", "Number of Calls", 110, categoryText);
-    callsByCategory.updateVis();
+    //callsByCategory.updateVis();
 
     requestReceivedUpdated = new Histogram({
       parentElement: '#requestReceivedUpdated',
     }, data, "days_between", "Issue Resolution Time", "Days Between Dates", "Number of Calls", 20, issueResText)
     requestReceivedUpdated.updateVis(10);
 
-    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, callsByZipcode, requestReceivedUpdated];
+    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, callsByZipcode, requestReceivedUpdated, linechart];
     filterData(); // initializes filteredData array (to show count on refresh)
   })
 .catch(error => {
@@ -182,7 +189,6 @@ function serviceNameCategories(d){
 }
 
 function agencyResponsibleOther(d){
-  //console.log(d.agency_responsible)
   //let agencies = ["Fire Dept", "Cin Water Works", "Park Department", "Police Department", "City Manager's Office", "Dept of Trans and Eng", "Cinc Health Dept", "Cinc Building Dept", "Public Services"];
   let agencies_other = ["Law Department", "Community Development", "Metropolitan Sewer", "Cincinnati Recreation", "Enterprise Services", "Regional Computer Center", "Treasury Department"];
   if (agencies_other.includes(d.agency_responsible)){
@@ -229,12 +235,13 @@ function filterData(resetBrush = false, fullReset = false) {
 				for (i in globalDataFilter){
 					let attrFilter = globalDataFilter[i]
 					if(attrFilter[0] === "requested_date"){
-						if((d[attrFilter[0]] > attrFilter[1][1] || d[attrFilter[0]] < attrFilter[1][0]) && attrFilter[1][1] !== attrFilter[1][0]){
-							return {...d, filtered: true}
+            let parseTime = d3.timeParse("%m/%d/%Y");
+						if((parseTime(d[attrFilter[0]]) > attrFilter[1][1] || parseTime(d[attrFilter[0]]) < attrFilter[1][0]) && attrFilter[1][1] !== attrFilter[1][0]){
+              return {...d, filtered: true}
 						}
 					}else{
 						if(!attrFilter[1].includes(d[attrFilter[0]]) && attrFilter[1].length > 0){
-							return {...d, filtered: true}
+              return {...d, filtered: true}
 						}
 					}
 				}
@@ -255,6 +262,6 @@ function filterData(resetBrush = false, fullReset = false) {
 
 function clearFilters(){
   leafletMap.drawnFeatures.clearLayers()
-	globalDataFilter = [];
+	globalDataFilter = [["requested_date", []]];
 	filterData(resetBrush=true, fullReset=true);
 }

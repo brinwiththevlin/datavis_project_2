@@ -128,6 +128,15 @@ class Barchart {
 
         vis.aggregatedData.sort(this.compare);
 
+        if (vis.aggregateAttr == "zipcode"){
+            let other_zipcode_count = vis.aggregatedData.reduce(function (sum, item) {
+              return sum + ((vis.aggregatedData.indexOf(item) >= 20) ? item.count : 0);
+            }, 0);
+            vis.other_zipcode_string = Object.keys(vis.aggregatedData.slice(20, vis.aggregatedData.length)).map(key => vis.aggregatedData[key].key).join(", ");
+            vis.aggregatedData = vis.aggregatedData.slice(0, 19);
+            vis.aggregatedData.push({key: "Other", count: other_zipcode_count});
+          }
+
         vis.xValue = d => d.key;
         vis.yValue = d => d.count;
 
@@ -176,6 +185,16 @@ class Barchart {
                 <div class="tooltip-title">${vis.config.xLabel}: ${d.key}</div>
                 <div class="tooltip-title">${vis.config.yLabel}: ${d.count}</div>
             `);
+
+            //If hovering over the "Other" col in the Zipcode barchart, also show what zipcodes are included in "Other"
+            if (d.key == "Other" && vis.aggregateAttr == "zipcode"){
+                d3.select('#tooltip')
+                .html(`
+                    <div class="tooltip-title">${vis.config.xLabel}: ${d.key}</div>
+                    <div class="tooltip-title">${vis.other_zipcode_string}</div>
+                    <div class="tooltip-title">${vis.config.yLabel}: ${d.count}</div>
+                `);
+            }
         })
         .on('mouseleave', () => {
             d3.select('#tooltip').style('display', 'none');

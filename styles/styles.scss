@@ -47,7 +47,7 @@ button{
   flex-direction: column;
   align-items: center;
   margin: 20px;
-  border: 3px solid black;
+  // border: 3px solid black;
   select{
     width: 200px;
   }
@@ -132,7 +132,6 @@ button{
 }
 
 #heatTimeDiv{
-  border: 3px solid black;
   rect:hover{
     stroke: #000000;
     stroke-width: 2px;
@@ -145,7 +144,7 @@ button{
 
 // BAR CHARTS
 .barchart, .histogram{
-  border: 3px solid black;
+  // border: 3px solid black;
   margin: 20px;
   .bar{
       fill: rgb(105, 179, 162);
@@ -178,6 +177,23 @@ button{
   height: 20px;
 }
 // END BAR CHARTS
+
+.timeline{
+  // border: 3px solid black;
+  margin: 20px;
+}
+
+.lineChartHolder{
+  flex-basis: auto;
+  #linechart{
+      .chart-line {
+          fill: none;
+          stroke: violet;
+          stroke-width: 3px;
+          clip-path: url(#clip);
+      }
+  }
+}
 
 /* TOOLTIPS */
 #tooltip {

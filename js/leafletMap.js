@@ -113,7 +113,6 @@ class LeafletMap {
                 .attr('r', 4) //change radius
                 .attr("stroke", "black");
 
-              //create a tool tip
               d3.select('#tooltip')
               .style('left', (event.pageX + 10) + 'px')   
               .style('top', (event.pageY + 10) + 'px')
@@ -130,8 +129,8 @@ class LeafletMap {
               d3.select('#tooltip')
                 .style('left', (event.pageX + 10) + 'px')   
                 .style('top', (event.pageY + 10) + 'px');
-            })              
-          .on('mouseleave', function() {
+          })              
+          .on('mouseleave', function() { //function to add mouseover event
               d3.select(this).transition() //D3 selects the object we have moused over in order to perform operations on it
                 .duration('150') //how long we are transitioning between the two states (works like keyframes)
                 .attr("fill", d => vis.colorScale(vis.colorValue(d))) //change the fill
@@ -315,6 +314,7 @@ class LeafletMap {
   
   renderVis() {
     let vis = this;
+
   }
 
   filterToPointsInPolygon(polys) {

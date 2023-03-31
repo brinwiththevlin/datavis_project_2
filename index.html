@@ -44,19 +44,23 @@
                 <div id="mapDiv"></div>
             </div>
         </div>
-        <div>
+
+        <div class="flex-container bg-light rounded">
             <svg id="callsByWeekDay"></svg>
         </div>
-        <div>
+        <div class="flex-container bg-light rounded">
             <svg id="callsByZipcode"></svg>
         </div>
-        <div>
+        <div class="flex-container bg-light rounded">
             <svg id="callsByCategory"></svg>
         </div>
-        <div>
-            <svg id="heatTimeDiv"></svg>
+        <div class="timeline flex-container bg-light rounded">
+            <div>
+                <svg id="heatTimeDiv"></svg>
+            </div>
+            <div class="lineChartHolder"><svg id="linechart"></svg></div>    
         </div>
-        <div>
+        <div class="flex-container bg-light rounded">
             <svg id="requestReceivedUpdated"></svg>
         </div>
     </div>
@@ -82,6 +86,7 @@
     <script src="js/histogram.js"></script>
     <script src="js/leafletMap.js"></script>
     <script src="js/heatmap.js"></script>
+    <script src="js/linechart.js"></script>
 
     <div id="tooltip"></div>
     <div id="info-tooltip"></div>
