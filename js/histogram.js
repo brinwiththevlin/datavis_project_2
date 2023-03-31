@@ -29,7 +29,7 @@ class Histogram {
 		vis.xScale = d3.scaleLinear().domain([0, d3.max(vis.data, d => d[vis.aggregateAttr])])
 			.range([0, vis.width]);
 				
-		vis.yScale = d3.scaleLog()
+		vis.yScale = d3.scaleLinear()
 			.range([ vis.height, 0]);
 
         vis.xAxis = d3.axisBottom(vis.xScale)
