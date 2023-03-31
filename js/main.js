@@ -77,7 +77,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     callsByZipcode = new Barchart({
       parentElement: '#callsByZipcode',
-      containerWidth: 600,
+      containerWidth: 525,
       containerHeight: 460
       }, data, "zipcode", "Calls By Zipcode", "Zipcode", "Number of Calls", 30, zipcodeText, zipcodeLink);
     //callsByZipcode.updateVis();

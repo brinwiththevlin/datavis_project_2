@@ -6,8 +6,8 @@ class Histogram {
     constructor(_config, _data, _aggregateAttr, _title, _xLabel, _yLabel, _XAxisLabelHeight = 20, _infoText = "") {
 		this.config = {
 			parentElement: _config.parentElement,
-			containerWidth: _config.containerWidth || 500,
-			containerHeight: _config.containerHeight || 300,
+			containerWidth: _config.containerWidth || 400,
+			containerHeight: _config.containerHeight || 400,
 			margin: _config.margin || {top: 45, right: 10, bottom: 30, left: 80},
 			title: _title,
 			xLabel: _xLabel,
