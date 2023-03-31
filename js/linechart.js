@@ -245,7 +245,7 @@ class LineChart {
             vis.tooltip.select('text')
                 .attr('transform', `translate(${vis.xScaleFocus(d.key)},${(vis.yScaleFocus(d.count) - 15)})`)
                 .style('user-select', 'none')
-                .text(Math.round(d.count));
+                .text(Math.round(d.count));s
           });
       
       // Update the axes

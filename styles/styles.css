@@ -1,7 +1,26 @@
 body {
-  background: #f8f8f8;
+  background: #EEF2FF;
   margin: 0;
   min-height: 100%;
+}
+
+.rounded {
+  border-radius: 15px!important;
+  margin: 20px;
+}
+
+.bg-light {
+  background-color: white!important;
+}
+
+.row {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-.5 * var(--bs-gutter-x));
+  margin-left: calc(-.5 * var(--bs-gutter-x));
 }
 
 .flex-container {
@@ -44,7 +63,7 @@ button {
   flex-direction: column;
   align-items: center;
   margin: 20px;
-  border: 3px solid black;
+  /* border: 3px solid black; */
 }
 .mapContainer select {
   width: 450px;
@@ -101,13 +120,6 @@ button {
   color: white;
 }
 
-.timeline {
-  border: 3px solid black;
-} 
-
-/* #heatTimeDiv {
-  border: 3px solid black;
-} */
 #heatTimeDiv rect:hover {
   stroke: #000000;
   stroke-width: 2px;
@@ -118,7 +130,7 @@ button {
 }
 
 .barchart, .histogram {
-  border: 3px solid black;
+  /* border: 3px solid black; */
   margin: 20px;
 }
 .barchart .bar, .histogram .bar {
@@ -146,18 +158,21 @@ button {
   stroke-width: 4px;
 }
 
-/* .lineChartHolder {
-  border: 3px solid black;
+.timeline {
+  /* border: 3px solid black; */
   margin: 20px;
+}
+
+.lineChartHolder {
   flex-basis: auto;
 }
 .lineChartHolder #linechart .chart-line {
   fill: none;
-  stroke: rgb(105, 179, 162);
+  stroke: violet;
   stroke-width: 3px;
   -webkit-clip-path: url(#clip);
           clip-path: url(#clip);
-} */
+}
 
 /* TOOLTIPS */
 #tooltip {
