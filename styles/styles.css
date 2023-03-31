@@ -7,22 +7,12 @@ body {
 }
 
 .rounded {
-  border-radius: 15px!important;
-  margin: 20px;
+  border-radius: 15px !important;
+  margin: 18px;
 }
 
 .bg-light {
-  background-color: white!important;
-}
-
-.row {
-  --bs-gutter-x: 1.5rem;
-  --bs-gutter-y: 0;
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: calc(-1 * var(--bs-gutter-y));
-  margin-right: calc(-.5 * var(--bs-gutter-x));
-  margin-left: calc(-.5 * var(--bs-gutter-x));
+  background-color: white !important;
 }
 
 .flex-container {
@@ -65,7 +55,6 @@ button {
   flex-direction: column;
   align-items: center;
   margin: 20px;
-  /* border: 3px solid black; */
 }
 .mapContainer select {
   width: 200px;
@@ -111,6 +100,7 @@ button {
 }
 .mapContainer .mapInnerContainer {
   display: flex;
+  margin: 20px;
 }
 
 .footerBar {
@@ -159,7 +149,6 @@ button {
 }
 
 .barchart, .histogram {
-  /* border: 3px solid black; */
   margin: 20px;
 }
 .barchart .bar, .histogram .bar {
@@ -191,8 +180,8 @@ button {
   width: 20px;
   height: 20px;
 }
+
 .timeline {
-  /* border: 3px solid black; */
   margin: 20px;
 }
 

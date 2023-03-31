@@ -1,10 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 
 body {
-  background: #f8f8f8;
+  background: #EEF2FF;
   margin: 0;
   min-height: 100%;
   font-family: 'Varela Round', sans-serif;
+}
+
+.rounded {
+  border-radius: 15px!important;
+  margin: 18px;
+}
+
+.bg-light {
+  background-color: white!important;
 }
 
 .flex-container{
@@ -92,6 +101,7 @@ button{
   }
   .mapInnerContainer {
     display: flex;
+    margin: 20px;
   }
 }
 
