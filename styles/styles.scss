@@ -1,7 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
 body {
-  background: #f8f8f8;
+  background: #EEF2FF;
   margin: 0;
   min-height: 100%;
+  font-family: 'Varela Round', sans-serif;
+}
+
+.rounded {
+  border-radius: 15px!important;
+  margin: 18px;
+}
+
+.bg-light {
+  background-color: white!important;
 }
 
 .flex-container{
@@ -46,13 +58,12 @@ button{
   margin: 20px;
   // border: 3px solid black;
   select{
-    width: 450px;
+    width: 200px;
   }
   #mapDiv {
-    width: 500px;
-    height: 500px;
+    width: 400px;
+    height: 400px;
     align-self: center;
-    margin: 20px 20px;
     circle.filtered{
       display: none;
     }
@@ -62,6 +73,35 @@ button{
     path{
       fill: none;
     }
+  }
+  .mapHeader {
+    display: flex;
+    align-self: self-end;
+    margin-top: 5px;
+  }
+  .mapTitle {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+  .mapMarkerColor .mapBGToggle {
+    font-size: 15px;
+  }
+  .mapFilterLegend {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .mapFilter {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin-bottom: 30px;
+    width: 280px;
+  }
+  .mapInnerContainer {
+    display: flex;
+    margin: 20px;
   }
 }
 
@@ -142,6 +182,10 @@ button{
   stroke: #333;
   stroke-width: 4px;
 }
+.info-logo {
+  width: 20px;
+  height: 20px;
+}
 // END BAR CHARTS
 
 .timeline{
@@ -186,5 +230,21 @@ button{
   color: black;
   font-family: Arial, Helvetica, sans-serif;
   display:inline;
+}
+#info-tooltip {
+  position: absolute;
+  display: none;
+  background: #fff;
+  box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
+  border: 1px solid #ddd;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  z-index: 99999;
+}
+.map-info-tool {
+  width: 20px;
+  height: 20px;
+  margin: 2px 6px 0 224px;
 }
 /* END TOOLTIPS */
