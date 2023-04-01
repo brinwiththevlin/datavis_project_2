@@ -50,6 +50,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     categoryText = "This barchart groups the calls into 10 categories - hover over the bars to get more information"
     weekdayText = "This barchart shows the number of calls made for every weekday in 2022"
     heatmapText = "How to use: this section includes a heatmap calendar, brushing timeline, and line chart. <br/>Hover over days on the heatmap to view more information. <br/>Use the brushing chart to zoom in on the data on the heatmap and line chart."
+    wordCloudText = "This word cloud shows words that are most commonly found in the issue description"
 
     // Links for info
     zipcodeLink = "<div class=\"tooltip-more-info\">More info <a href=\"https://www.city-data.com/zipmaps/Cincinnati-Ohio.html\" target=\"_blank\">here</a></div>"
@@ -93,7 +94,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
     }, data, "days_between", "Issue Resolution Time", "Days Between Dates", "Number of Calls", 20, issueResText)
     requestReceivedUpdated.updateVis(10);
 
-    descriptionWordCloud = new WordCloud({parentElement: "#descriptionWordCloud"}, data)
+    descriptionWordCloud = new WordCloud({parentElement: "#descriptionWordCloud"}, data, wordCloudText)
     //descriptionWordCloud.updateVis()
     filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, callsByZipcode, requestReceivedUpdated, linechart];
     filterData(); // initializes filteredData array (to show count on refresh)

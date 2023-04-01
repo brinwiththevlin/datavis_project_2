@@ -94,6 +94,12 @@ class Barchart {
                     }
                 
             })
+            .on("mouseover", function(d){ 
+                d3.select(this).attr("xlink:href", "../styles/info-logo-blue.png").style("cursor", "pointer");
+            })
+            .on("mouseleave", function(d){ 
+                d3.select(this).attr("xlink:href", "../styles/info-logo.png");
+            })
 
         // Y-Axis Label
         vis.svg.append("text")
