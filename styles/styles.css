@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Varela&display=swap");
 body {
   background: #EEF2FF;
   margin: 0;
@@ -87,8 +88,8 @@ button {
 }
 .mapContainer .mapHeader {
   display: flex;
-  align-self: self-end;
-  margin: 20px 20px 0 0;
+  align-self: center;
+  margin-top: 20px;
 }
 .mapContainer .mapTitle {
   font-size: 20px;
@@ -218,7 +219,6 @@ button {
   box-shadow: 2px 2px 3px 0px rgba(92, 92, 92, 0.5);
   border: 1px solid #ddd;
   font-size: 12px;
-  font-weight: 600;
   padding: 2px 8px;
   z-index: 99999;
 }
@@ -246,15 +246,40 @@ button {
   box-shadow: 2px 2px 3px 0px rgba(92, 92, 92, 0.5);
   border: 1px solid #ddd;
   font-size: 12px;
-  font-weight: 600;
   padding: 2px 8px;
   z-index: 99999;
 }
 
-.map-info-tool {
+.tooltip-more-info {
+  margin-bottom: 5px;
+}
+
+.info-icon-container {
   width: 20px;
   height: 20px;
   margin-left: 280px;
 }
+.info-icon-container .map-info-tool-blue {
+  display: none;
+}
+.info-icon-container .map-info-tool {
+  width: 20px;
+  height: 20px;
+}
 
+.info-icon-container:hover .map-info-tool-blue {
+  display: block;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.info-icon-container:hover .map-info-tool {
+  display: none;
+}
+
+/*.info-icon-container:focus {
+  .tooltip-text {
+    display: block;
+  }
+}*/
 /* END TOOLTIPS *//*# sourceMappingURL=styles.css.map */

@@ -14,7 +14,10 @@
         <div class="mapContainer flex-container bg-light rounded">
             <div class="mapHeader">
                 <div class="mapTitle">Cincinnati 311 Calls</div>
-                <img src="styles/info-logo.png" class="map-info-tool">
+                <!--div class="info-icon-container" onclick="infoIconClicked()">
+                    <img src="styles/info-logo.png" class="map-info-tool">
+                    <img src="styles/info-logo-blue.png" class="map-info-tool-blue">
+                </div-->
             </div>
             <div class="mapInnerContainer">
                 <div class="mapFilterLegend">
@@ -60,11 +63,12 @@
             <div>
                 <svg id="heatTimeDiv"></svg>
             </div>
-            <div class="lineChartHolder"><svg id="linechart"></svg></div>
-            <div style="border: 3px solid black;">
-                <div id="descriptionWordCloud"></div>
-            </div>    
+            <div class="lineChartHolder"><svg id="linechart"></svg></div>  
         </div>
+
+        <div class="flex-container bg-light rounded" style="height: fit-content">
+            <div id="descriptionWordCloud"></div>
+        </div>  
     </div>
     <footer class="flex-container footerBar">
         <div style="align-self: center"><span class="dataCountLabel">Call Count:</span><span class="dataCount">0</span></div>

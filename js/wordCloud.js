@@ -4,13 +4,14 @@ class WordCloud{
    * @param {Object}
    * @param {Array}
    */
-  constructor(_config, _data, ) {
+  constructor(_config, _data, _infoText) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 800,
+      containerWidth: _config.containerWidth || 400,
       containerHeight: _config.containerHeight || 400,
       margin: _config.margin || {top: 30, right: 30, bottom: 30, left: 30},
-      tooltipPadding: _config.tooltipPadding || 15
+      tooltipPadding: _config.tooltipPadding || 15,
+      infoText: _infoText
     }
 
     // this.data = _data;
@@ -55,7 +56,36 @@ class WordCloud{
         .attr("height", vis.height + vis.config.margin.top + vis.config.margin.bottom)
         .append("g")
         .attr("transform",
-              "translate(" + vis.config.margin.left + "," + vis.config.margin.top + ")");
+              "translate(" + (15) + "," + (40) + ")");
+
+    // Info Logo
+    vis.svg
+    .append("svg:image")
+    .attr("xlink:href", "../styles/info-logo.png")
+    .attr('class', 'info-logo')
+    .attr("transform", "translate(" + (465) + " ," + (-15) + ")")
+    .on('click', (event, d) => {
+        if (!d3.select('#info-tooltip').classed("selected") ){
+            d3.select('#info-tooltip').classed("selected", true)
+            .style('display', 'block')
+            .style('left', (event.pageX + 5) + 'px')   
+            .style('top', (event.pageY) + 'px')
+            .html(`
+                <div class="tooltip-description">${vis.config.infoText}</div>
+                
+            `);
+            }else{
+            d3.select('#info-tooltip').classed("selected", false);
+            d3.select('#info-tooltip').style('display', 'none');
+            }
+        
+    })
+    .on("mouseover", function(d){ 
+      d3.select(this).attr("xlink:href", "../styles/info-logo-blue.png");
+    })
+    .on("mouseleave", function(d){ 
+        d3.select(this).attr("xlink:href", "../styles/info-logo.png");
+    })
   
     vis.updateVis();
   }
@@ -71,7 +101,7 @@ class WordCloud{
     vis.layout = d3.layout.cloud()
       .size([vis.width, vis.height])
       .words(vis.data.map(function(d) { return {text: d.word, size:vis.sizeScale(vis.sizeValue(d))}; }))
-      .padding(5)        //space between words
+      .padding(8)        //space between words
       .rotate(function() { return ~~(Math.random() * 2) * 90; })
       .fontSize(function(d) { return d.size; })      // font size of words
       .on("end", draw);
@@ -87,9 +117,9 @@ class WordCloud{
             .data(words)
           .enter().append("text")
             .style("font-size", function(d) { return d.size; })
-            .style("fill", "#69b3a2")
+            .style("font-family", "Varela")
+            .style("fill", "#77aac6")
             .attr("text-anchor", "middle")
-            .style("font-family", "Impact")
             .attr("transform", function(d) {
               return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
             })
