@@ -3,8 +3,9 @@ let data;
 let leafletMap;
 let globalDataFilter = [["requested_date", []]];
 let filterableVisualizations = [];
+let stop_words = [];
 //-------------------------//
-
+d3.csv('/data/stop_words.csv', word => stop_words.push(word.words))
 d3.dsv("|","/data/cincy311_cleaned.tsv")
   .then(_data =>{
     data = _data;
@@ -96,7 +97,7 @@ d3.dsv("|","/data/cincy311_cleaned.tsv")
 
     descriptionWordCloud = new WordCloud({parentElement: "#descriptionWordCloud"}, data, wordCloudText)
     //descriptionWordCloud.updateVis()
-    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, callsByZipcode, requestReceivedUpdated, linechart];
+    filterableVisualizations = [leafletMap, callsByWeekDay, heatMap, callsByCategory, callsByZipcode, requestReceivedUpdated, linechart, descriptionWordCloud];
     filterData(); // initializes filteredData array (to show count on refresh)
   })
 .catch(error => {

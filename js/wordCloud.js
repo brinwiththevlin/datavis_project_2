@@ -13,33 +13,8 @@ class WordCloud{
       tooltipPadding: _config.tooltipPadding || 15,
       infoText: _infoText
     }
-
-    // this.data = _data;
-    let vis = this;
-    vis.freqMap = {}
-    vis.stop_words = [];
-    d3.csv('/data/stop_words.csv', word => vis.stop_words.push(word.words))
-    .then(stopwords => {
-      _data.forEach(d => {
-        if (d.description != "Request entered through the Web. Refer to Intake Questions for further description.") {
-          var words = d.description.replace(/[^a-z\s]/igm,"").toLowerCase().split(/\s/gm).filter(string => string);
-          words.forEach(w => {
-            if (!vis.freqMap[w] && !vis.stop_words.includes(w.replace(/\s/ig, ""))) {
-              vis.freqMap[w] = 1;
-            }
-            else if (!vis.stop_words.includes(w)){
-              vis.freqMap[w] += 1;
-            }
-
-          })
-        }
-      })
-      vis.data = Object.entries(vis.freqMap).map((e) => ( { word:e[0], size:e[1] } ))
-      vis.data.sort((a,b) => b.size - a.size)
-      vis.data = vis.data.slice(0, 50)
-      //TODO: get word frequency out of the data
-      vis.initVis()
-  })
+    this.data = _data;
+    this.initVis();
   }
 
   initVis(){
@@ -63,7 +38,7 @@ class WordCloud{
     .append("svg:image")
     .attr("xlink:href", "../styles/info-logo.png")
     .attr('class', 'info-logo')
-    .attr("transform", "translate(" + (465) + " ," + (-15) + ")")
+    .attr("transform", "translate(" + (240) + " ," + (-215) + ")")
     .on('click', (event, d) => {
         if (!d3.select('#info-tooltip').classed("selected") ){
             d3.select('#info-tooltip').classed("selected", true)
@@ -93,6 +68,24 @@ class WordCloud{
   updateVis(){
     let vis = this;
 
+    vis.freqMap = {}
+    vis.data.forEach(d => {
+      if (!d.filtered && !d.description.includes("Request entered through the Web. Refer to Intake Questions for further description.")) {
+        let words = d.description.replace(/[^a-z\s]/igm,"").toLowerCase().split(/\s/gm).filter(string => string);
+        words.forEach(w => {
+          if (!vis.freqMap[w] && !stop_words.includes(w.replace(/\s/ig, ""))) {
+            vis.freqMap[w] = 1;
+          }
+          else if (!stop_words.includes(w)){
+            vis.freqMap[w] += 1;
+          }
+        })
+      }
+    })
+    vis.data = Object.entries(vis.freqMap).map((e) => ( { word:e[0], size:e[1] } ))
+    vis.data.sort((a,b) => b.size - a.size)
+    vis.data = vis.data.slice(0, 50)
+
     vis.sizeValue = d => d.size;
     vis.sizeScale.domain(d3.extent(vis.data, vis.sizeValue))
 
@@ -111,11 +104,11 @@ class WordCloud{
     // Wordcloud features that are THE SAME from one word to the other can be here
     function draw(words) {
       vis.svg
-        .append("g")
+        .join("g")
           .attr("transform", "translate(" + vis.layout.size()[0] / 2 + "," + vis.layout.size()[1] / 2 + ")")
           .selectAll("text")
             .data(words)
-          .enter().append("text")
+          .join("text")
             .style("font-size", function(d) { return d.size; })
             .style("font-family", "Varela")
             .style("fill", "#77aac6")
@@ -125,12 +118,5 @@ class WordCloud{
             })
             .text(function(d) { return d.text; });
     }
-    this.renderVis();
-  }
-
-  renderVis(){
-
   }
 }
-// List of words
-
